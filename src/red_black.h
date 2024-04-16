@@ -9,6 +9,7 @@ class red_black_node
 	string title;
 	red_black_node* left;
 	red_black_node* right;
+	red_black_node* parent;
 	
 public:
 	// Constructor
@@ -17,7 +18,8 @@ public:
 		this->title = title;
 		this->artist = artist;
 		left = nullptr;
-		reight = nullptr;
+		right = nullptr;
+		parent = nullptr;
 		red = true;
 	}
 };
@@ -58,10 +60,12 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 	if(artist < root->artist) 
 	{
 		root->left = insert_node(root, artist, title);
+		root->left->parent = root;
 	}
 	if(artist > root->artist) 
 	{
 		root->right = insert_node(root, artist, title);
+		root->right->parent = root;
 	}
 }
 
