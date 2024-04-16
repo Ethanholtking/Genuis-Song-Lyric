@@ -42,12 +42,14 @@ public:
 		this->root = root;
 	}
 	red_black_tree* insert_node(red_black_node* root, string artist, string title);
+	red_black_tree* right_rot(red_black_node* root);
+	red_black_tree* left_rot(red_black_node* root);
 };
 
 
 red_black_tree* red_black_tree::insert_node(red_black_node* root, string artist, string title) 
 {
-	// Checks if the tree is empty
+	// inserts a node
 	if(root == nullptr) 
 	{
 		return new red_black_node(artist, title);
@@ -60,4 +62,24 @@ red_black_tree* red_black_tree::insert_node(red_black_node* root, string artist,
 	{
 		root->right = insert_node(root, artist, title);
 	}
+}
+
+// Right rotation
+red_black_node* red_black_tree::right_rot(red_black_node* root)
+{
+	Node* save = root->left->right;
+	Node* new_root = root->left;
+	root->left->right = root;
+	root->left = save;
+	return new_root;
+}
+
+// Left rotation
+red_black_node* red_black_tree::left_rot(red_black_node* root)
+{
+	Node* save = root->right->left;
+	Node* new_root = root->right;
+	root->right->left = root;
+	root->right = save;
+	return new_root;
 }
