@@ -44,11 +44,11 @@ public:
 		this->root = root;
 	}
 	red_black_node* insert_node(red_black_node* root, string artist, string title);
-	red_black_node* right_rot(red_black_node* root);
-	red_black_node* left_rot(red_black_node* root);
+	void right_rot(red_black_node* root);
+	void left_rot(red_black_node* root);
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
-	red_black_node* color_flip(red_black_node* root);
+	void balance(red_black_node* root);
 };
 
 
@@ -69,34 +69,26 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 		root->right = insert_node(root, artist, title);
 		root->right->parent = root;
 	}
+
+	balance(root);
 }
 
 // Right rotation
-red_black_node* red_black_tree::right_rot(red_black_node* root)
+void red_black_tree::right_rot(red_black_node* root)
 {
 	Node* save = root->left->right;
 	Node* new_root = root->left;
 	root->left->right = root;
 	root->left = save;
-	return new_root;
 }
 
 // Left rotation
-red_black_node* red_black_tree::left_rot(red_black_node* root)
+void red_black_tree::left_rot(red_black_node* root)
 {
 	Node* save = root->right->left;
 	Node* new_root = root->right;
 	root->right->left = root;
 	root->right = save;
-	return new_root;
-}
-
-// Color switch
-red_black_node* red_black_tree::color_flip(red_black_node* root) 
-{
-	root->red = true;
-	root->left->red = false;
-	root->right->red = false;
 }
 
 red_black_node* red_black_tree::get_uncle(red_black_node* root) 
@@ -115,8 +107,6 @@ red_black_node* red_black_tree::get_uncle(red_black_node* root)
 	}
 }
 
-
-
 red_black_node* red_black_tree::get_grandparent(red_black_node* root) 
 {
 	// root is the root of the tree
@@ -126,4 +116,44 @@ red_black_node* red_black_tree::get_grandparent(red_black_node* root)
 	else if (root->parent->parent = = nullptr)
 		return nullptr;
 	return root->parent->parent;
+}
+
+// Balancing
+void red_black_tree::balance(red_black_node* root)
+{
+	if (root->parent == nullptr) 
+	{
+		node->color = black
+			return;
+	}
+	if (root->parent->red == false)
+		return;
+	red_black_node* parent = root->parent;
+	grandparent = get_grandparent(root);
+	uncle = get_uncle(root);
+	if (uncle != nullptr && uncle->red == true) 
+	{
+		parent->red = uncle->red = false;
+		grandparent->red = true;
+		balance(grandparent);
+		return;
+	}
+	if(root == parent->right && parent == grandparent->left) 
+	{
+		left_rot(parent);
+		root = parent;
+		parent = root->parent;
+	}
+	else if (node == parent->left && parent == grandparent->right) 
+	{
+		right_rot(parent);
+		root = parent;
+		parent = root->parent;
+	}
+	parent->red = false;
+	grandparent->red = true;
+	if (root == parent->left)
+		rot_right(grandparent);
+	else
+		rot_left(grandparent);
 }
