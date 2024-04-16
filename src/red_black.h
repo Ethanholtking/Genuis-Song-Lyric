@@ -41,14 +41,14 @@ public:
 	{
 		this->root = root;
 	}
-	red_black_tree* insert_node(red_black_node* root, string artist, string title);
-	red_black_tree* right_rot(red_black_node* root);
-	red_black_tree* left_rot(red_black_node* root);
-	red_black_tree* color_flip(red_black_node* root);
+	red_black_node* insert_node(red_black_node* root, string artist, string title);
+	red_black_node* right_rot(red_black_node* root);
+	red_black_node* left_rot(red_black_node* root);
+	red_black_node* color_flip(red_black_node* root);
 };
 
 
-red_black_tree* red_black_tree::insert_node(red_black_node* root, string artist, string title) 
+red_black_node* red_black_tree::insert_node(red_black_node* root, string artist, string title) 
 {
 	// inserts a node
 	if(root == nullptr) 
@@ -85,6 +85,7 @@ red_black_node* red_black_tree::left_rot(red_black_node* root)
 	return new_root;
 }
 
+// Color switch
 red_black_node* red_black_tree::color_flip(red_black_node* root) 
 {
 	root->red = true;
