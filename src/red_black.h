@@ -44,6 +44,7 @@ public:
 	red_black_tree* insert_node(red_black_node* root, string artist, string title);
 	red_black_tree* right_rot(red_black_node* root);
 	red_black_tree* left_rot(red_black_node* root);
+	red_black_tree* color_flip(red_black_node* root);
 };
 
 
@@ -82,4 +83,11 @@ red_black_node* red_black_tree::left_rot(red_black_node* root)
 	root->right->left = root;
 	root->right = save;
 	return new_root;
+}
+
+red_black_node* red_black_tree::color_flip(red_black_node* root) 
+{
+	root->red = true;
+	root->left->red = false;
+	root->right->red = false;
 }
