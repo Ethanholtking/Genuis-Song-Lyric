@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 using namespace std;
 
@@ -7,7 +8,7 @@ public:
 	// Variables for the nide
 	bool red;
 	string artist;
-	string title;
+	int title;
 	red_black_node* left;
 	red_black_node* right;
 	red_black_node* parent;
@@ -31,7 +32,7 @@ public:
 	//Constructor
 	red_black_tree()
 	{
-		root = nullptr;
+		this->root = nullptr;
 	}
 	// Getter
 	red_black_node* get_root()
@@ -54,41 +55,89 @@ public:
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string artist, string title)
 {
+	// If the tree is empty
+	if (this->root == nullptr)
+	{
+		red_black_node* tree_root = new red_black_node(artist, title);
+		tree_root->red = false;
+		return tree_root;
+	}
 	// inserts a node
 	if (root == nullptr)
 	{
 		return new red_black_node(artist, title);
 	}
-	if (artist < root->artist)
+	else if (title < root->title)
 	{
-		root->left = insert_node(root, artist, title);
+		root->left = insert_node(root->left, artist, title);
 		root->left->parent = root;
+		balance(root->left);
 	}
-	if (artist > root->artist)
+	else if (title > root->title)
 	{
-		root->right = insert_node(root, artist, title);
+		root->right = insert_node(root->right, artist, title);
 		root->right->parent = root;
+		balance(root->right);
 	}
 
-	balance(root);
+	//balance(root);
+	return root;
 }
 
 // Right rotation
 void red_black_tree::right_rot(red_black_node* root)
 {
-	red_black_node* save = root->left->right;
-	red_black_node* new_root = root->left;
-	root->left->right = root;
-	root->left = save;
+	cout << "right rotation\n";
+	cout << "root: " << root->title << endl;
+	red_black_node* saved = root->left;
+	root->left = saved->right;
+	if (saved->right != nullptr)
+	{
+		saved->right->parent = root;
+		root->left = saved->right;
+	}
+	if (root->parent == nullptr)
+	{
+		saved->right = root;
+		saved->parent = nullptr;
+		return;
+	}
+	saved->parent = root->parent;
+	if (root->parent->left == root)
+		root->parent->left = saved;
+	else
+		root->parent->right = saved;
+	saved->right = root;
+	root->parent = saved;
+	root->red = true;
 }
 
 // Left rotation
 void red_black_tree::left_rot(red_black_node* root)
 {
-	red_black_node* save = root->right->left;
-	red_black_node* new_root = root->right;
-	root->right->left = root;
-	root->right = save;
+	cout << "left rotation\n";
+	cout << "root: " << root->title << endl;
+	red_black_node* saved = root->right;
+	root->right = saved->left;
+	if (saved->left != nullptr)
+	{
+		saved->left->parent = root;
+		root->right = saved->left;
+	}
+	if (root->parent == nullptr)
+	{
+		saved->left = root;
+		saved->parent = nullptr;
+		return;
+	}
+	saved->parent = root->parent;
+	if (root->parent->left == root)
+		root->parent->left = saved;
+	else
+		root->parent->right = saved;
+	saved->left = root;
+	root->parent = saved;
+	root->red = true;
 }
 
 red_black_node* red_black_tree::get_uncle(red_black_node* root)
@@ -121,11 +170,13 @@ red_black_node* red_black_tree::get_grandparent(red_black_node* root)
 // Balancing
 void red_black_tree::balance(red_black_node* root)
 {
+	// If the root is red make it black
 	if (root->parent == nullptr)
 	{
 		root->red = false;
 		return;
 	}
+	// If the parent is not red
 	if (root->parent->red == false)
 		return;
 	red_black_node* parent = root->parent;
@@ -133,27 +184,41 @@ void red_black_tree::balance(red_black_node* root)
 	red_black_node* uncle = get_uncle(root);
 	if (uncle != nullptr && uncle->red == true)
 	{
-		parent->red = uncle->red = false;
+		parent->red = false;
+		uncle->red = false;
 		grandparent->red = true;
 		balance(grandparent);
 		return;
 	}
-	if (root == parent->right && parent == grandparent->left)
+	if (grandparent != nullptr)
 	{
-		left_rot(parent);
-		root = parent;
-		parent = root->parent;
+		if (grandparent->left != nullptr)
+		{
+			if (root == parent->right && parent == grandparent->left)
+			{
+				left_rot(parent);
+				root = parent;
+				parent = root->parent;
+			}
+		}
+		else if (grandparent->right != nullptr)
+		{
+			if (root == parent->left && parent == grandparent->right)
+			{
+				right_rot(parent);
+				root = parent;
+				parent = root->parent;
+			}
+		}
+		parent->red = false;
+		grandparent->red = true;
+		if (root == parent->left)
+			right_rot(grandparent);
+		else
+		{
+			left_rot(grandparent);
+			cout << "grandparent: " << grandparent->title << endl;
+			cout << "root: " << grandparent->parent->title << " and " << parent->title << endl;
+		}
 	}
-	else if (root == parent->left && parent == grandparent->right)
-	{
-		right_rot(parent);
-		root = parent;
-		parent = root->parent;
-	}
-	parent->red = false;
-	grandparent->red = true;
-	if (root == parent->left)
-		right_rot(grandparent);
-	else
-		left_rot(grandparent);
 }
