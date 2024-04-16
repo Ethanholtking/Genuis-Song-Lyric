@@ -41,4 +41,23 @@ public:
 	{
 		this->root = root;
 	}
+	red_black_tree* insert_node(red_black_node* root, string artist, string title);
 };
+
+
+red_black_tree* red_black_tree::insert_node(red_black_node* root, string artist, string title) 
+{
+	// Checks if the tree is empty
+	if(root == nullptr) 
+	{
+		return new red_black_node(artist, title);
+	}
+	if(artist < root->artist) 
+	{
+		root->left = insert_node(root, artist, title);
+	}
+	if(artist > root->artist) 
+	{
+		root->right = insert_node(root, artist, title);
+	}
+}
