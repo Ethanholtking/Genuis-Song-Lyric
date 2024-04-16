@@ -1,5 +1,7 @@
 #import <iostream>
-
+#import <string>
+#include "red_black.h"
+using namespace std;
 
 int main() {
     bool start = true;
