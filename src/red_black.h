@@ -46,6 +46,8 @@ public:
 	red_black_node* insert_node(red_black_node* root, string artist, string title);
 	red_black_node* right_rot(red_black_node* root);
 	red_black_node* left_rot(red_black_node* root);
+	red_black_node* get_uncle(red_black_node* root);
+	red_black_node* get_grandparent(red_black_node* root);
 	red_black_node* color_flip(red_black_node* root);
 };
 
@@ -95,4 +97,33 @@ red_black_node* red_black_tree::color_flip(red_black_node* root)
 	root->red = true;
 	root->left->red = false;
 	root->right->red = false;
+}
+
+red_black_node* red_black_tree::get_uncle(red_black_node* root) 
+{
+	red_black_node grandparent = get_grandparent(root);
+	// root is the root of the tree or is child of the tree's root
+	if (root->parent == nullptr || grandparent == nullptr)
+		return nullptr;
+	else 
+	{
+		// If the grandparents left child is the root's parent
+		if (grandparent->left == root->parent)
+			return grandparent->right;
+		else
+			return grandparent->left;
+	}
+}
+
+
+
+red_black_node* red_black_tree::get_grandparent(red_black_node* root) 
+{
+	// root is the root of the tree
+	if (root->parent == nullptr)
+		return nullptr;
+	// root is child of the tree's root
+	else if (root->parent->parent = = nullptr)
+		return nullptr;
+	return root->parent->parent;
 }
