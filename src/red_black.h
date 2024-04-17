@@ -8,7 +8,7 @@ public:
 	// Variables for the nide
 	bool red;
 	string artist;
-	int title;
+	string title;
 	red_black_node* left;
 	red_black_node* right;
 	red_black_node* parent;
