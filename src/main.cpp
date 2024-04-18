@@ -29,6 +29,7 @@ vector<vector<string>> readCSV(const string& filename) {
 
         // Read and discard the first cell
         getline(ss, cell, ',');
+        getline(ss, cell, ',');
 
         // Split the line into cells using comma as delimiter
         while(getline(ss, cell, ',')){
@@ -52,54 +53,45 @@ int main() {
     // Read in the CSV data
     vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
 
-    /*
-    // Temp print data
-    for (const auto& row : csvData) {
-        for (const auto& cell : row) {
-            std::cout << cell << "\t";
+    // insert data to hash map
+    UnorderedMap map(csvData.size());
+    string title;
+
+    for(const auto& element : csvData){
+        for(const auto& str : element) {
+            map.addSong(str);
         }
-        std::cout << std::endl;
     }
-    */
 
     cout << endl;
     std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
     while(start){
-        std::cout << "Please enter the word to search:";
-        cin >> input; // string to be searched in song list
-        cout << endl;
 
-        std::cout << "Which method would you like to search with?" << endl;
-        cout << "(Type 1 for Unordered Map and type 2 for Ordered Map):";
+
+        std::cout << "Which function would you like to use?" << endl;
+        cout << "1. Most used words in song titles\n 2. % of total songs that include specific word\n"
+                "3. Search for a song\n 4. Quit\n" << endl;
+        cout << "(Type 1, 2, 3, or 4):";
         cin >> methodPick;
 
-        // Hash set
-        if(methodPick == "1"){
-            UnorderedMap map(csvData.size());
-            string title;
-            string artist;
-
-
-
-
-            for(int i=0; i<=(csvData.size()-1); i++){
-                //title = csvData.at(i).at(i+1);
-                i++;
-            }
-
-
-            //cout << artist << title << endl;
-            cout << "show the result of Unordered map" << endl;
+        if (methodPick == "1") {
+            cout << "find most used song titles" << endl;
+        }
+        else if (methodPick == "2") {
+            cout << "find % of total songs" << endl;
+        }
+        else if (methodPick == "3") {
+            std::cout << "Please enter the song to search:";
+            cin >> input; // string to be searched in song list
             cout << endl;
         }
-        // Red Black tree
-        else if(methodPick == "2"){
-            cout << "show the result of Ordered map" << endl;
-            cout << endl;
+        else {
+            start = false;
         }
+
 
         // Ask user if they want to search again
-        cout << "Would you like to search again? (Y for yes N for no):";
+        cout << "Would you like to use again? (Y for yes N for no):";
         cin >> loopEnd;
         if(loopEnd == "n" || loopEnd == "N"){
             start = false;
