@@ -7,17 +7,15 @@ class red_black_node
 public:
 	// Variables for the node
 	bool red;
-	string artist;
 	string title;
 	red_black_node* left;
 	red_black_node* right;
 	red_black_node* parent;
 
 	// Constructor
-	red_black_node(string artist, string title)
+	red_black_node(string title)
 	{
 		this->title = title;
-		this->artist = artist;
 		left = nullptr;
 		right = nullptr;
 		parent = nullptr;
@@ -44,7 +42,7 @@ public:
 	{
 		this->root = root;
 	}
-	red_black_node* insert_node(red_black_node* root, string artist, string title);
+	red_black_node* insert_node(red_black_node* root, string title);
 	void right_rot(red_black_node* root);
 	void left_rot(red_black_node* root);
 	red_black_node* get_uncle(red_black_node* root);
@@ -56,27 +54,27 @@ public:
 };
 
 
-red_black_node* red_black_tree::insert_node(red_black_node* root, string artist, string title)
+red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
 	string rot;
 	red_black_node* prev;
 	// If the tree is empty
 	if (this->root == nullptr)
 	{
-		red_black_node* tree_root = new red_black_node(artist, title);
+		red_black_node* tree_root = new red_black_node(title);
 		tree_root->red = false;
 		return tree_root;
 	}
 	// inserts a node
 	if (root == nullptr)
 	{
-		return new red_black_node(artist, title);
+		return new red_black_node(title);
 	}
 	// Inserts a node to the left
 	else if (title < root->title)
 	{
 		prev = root->parent;
-		root->left = insert_node(root->left, artist, title);
+		root->left = insert_node(root->left title);
 		// Updates the left nodes parent
 		if (root->left != nullptr)
 			root->left->parent = root;
@@ -106,7 +104,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 	else if (title > root->title)
 	{
 		prev = root->parent;
-		root->right = insert_node(root->right, artist, title);
+		root->right = insert_node(root->right title);
 		// Updates the right nodes parent
 		if (root->right != nullptr)
 			root->right->parent = root;
