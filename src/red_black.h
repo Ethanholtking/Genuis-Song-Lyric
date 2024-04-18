@@ -5,10 +5,10 @@ using namespace std;
 class red_black_node
 {
 public:
-	// Variables for the nide
+	// Variables for the node
 	bool red;
 	string artist;
-	int title;
+	string title;
 	red_black_node* left;
 	red_black_node* right;
 	red_black_node* parent;
@@ -45,16 +45,18 @@ public:
 		this->root = root;
 	}
 	red_black_node* insert_node(red_black_node* root, string artist, string title);
-	red_black_node* right_rot(red_black_node* root);
-	red_black_node* left_rot(red_black_node* root);
+	void right_rot(red_black_node* root);
+	void left_rot(red_black_node* root);
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
-	red_black_node* balance(red_black_node* root);
+	string balance(red_black_node* root);
 };
 
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string artist, string title)
 {
+	string rot;
+	red_black_node* prev;
 	// If the tree is empty
 	if (this->root == nullptr)
 	{
@@ -69,22 +71,52 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 	}
 	else if (title < root->title)
 	{
+		prev = root->parent;
 		root->left = insert_node(root->left, artist, title);
-		root->left->parent = root;
-		balance(root->left);
+		if (root->left != nullptr)
+			root->left->parent = root;
+		rot = balance(root->left);
+		if (rot != "" || root->parent != prev)
+		{
+			if (rot == "l")
+				return root->left->right;
+			if (rot == "r")
+				return root->right->left;
+			else if (rot == "lr")
+				return root->parent->left->left;
+			else if (rot == "rl")
+				return root->parent->left->right;
+			else if (root->parent != prev)
+				return root->parent;
+		}
 	}
 	else if (title > root->title)
 	{
+		prev = root->parent;
 		root->right = insert_node(root->right, artist, title);
-		root->right->parent = root;
-		balance(root->right);
+		if (root->right != nullptr)
+			root->right->parent = root;
+		rot = balance(root->right);
+		if (rot != "" || root->parent != prev)
+		{
+			if (rot == "l") {
+				return root->left->right;
+			}
+			if (rot == "r")
+				return root->right->left;
+			else if (rot == "lr")
+				return root->parent->left->left;
+			else if (rot == "rl")
+				return root->parent->left->right;
+			else if (root->parent != prev)
+				return root->parent;
+		}
 	}
-
 	return root;
 }
 
 // Right rotation
-red_black_node* red_black_tree::right_rot(red_black_node* root)
+void red_black_tree::right_rot(red_black_node* root)
 {
 	cout << "right rotation\n";
 	cout << "root: " << root->title << endl;
@@ -98,20 +130,21 @@ red_black_node* red_black_tree::right_rot(red_black_node* root)
 	root->left->right = root;
 	root->left = saved;
 	if (root->left != nullptr)
-	{
 		root->left->parent = root;
-	}
-	return root->parent;
+	return;
 }
 
 // Left rotation
-red_black_node* red_black_tree::left_rot(red_black_node* root)
+void red_black_tree::left_rot(red_black_node* root)
 {
 	cout << "left rotation\n";
 	cout << "root: " << root->title << endl;
 	red_black_node* saved = root->right->left;
+	//rotation at the root
 	root->right->parent = root->parent;
-	if (root->parent->right == root)
+	if (root->parent == nullptr)
+		root->right->parent = nullptr;
+	else if (root->parent->right == root)
 		root->parent->right = root->right;
 	else
 		root->parent->left = root->right;
@@ -119,10 +152,8 @@ red_black_node* red_black_tree::left_rot(red_black_node* root)
 	root->right->left = root;
 	root->right = saved;
 	if (root->right != nullptr)
-	{
 		root->right->parent = root;
-	}
-	return root->parent;
+	return;
 }
 
 red_black_node* red_black_tree::get_uncle(red_black_node* root)
@@ -153,30 +184,30 @@ red_black_node* red_black_tree::get_grandparent(red_black_node* root)
 }
 
 // Balancing
-red_black_node* red_black_tree::balance(red_black_node* root)
+string red_black_tree::balance(red_black_node* root)
 {
+	string rot = "";
+	if (root == nullptr)
+		return rot;
 	// If the root is red make it black
 	if (root->parent == nullptr)
 	{
 		root->red = false;
-		return root;
+		return rot;
 	}
-	// If the parent is not red
-	if (root->parent->red == false)
-		return root;
+	// If the parent is not red or the root itself is black
+	if (root->parent->red == false || root->red == false)
+		return rot;
 	red_black_node* parent = root->parent;
 	red_black_node* grandparent = get_grandparent(root);
 	red_black_node* uncle = get_uncle(root);
 	if (uncle != nullptr && uncle->red == true)
 	{
-		cout << "color switch" << endl;
-		cout << "root: " << root->title << endl;
-		cout << "parent: " << root->parent->title << endl;
+		cout << "color flip\n";
 		parent->red = false;
 		uncle->red = false;
 		grandparent->red = true;
-		balance(grandparent);
-		return root;
+		return rot;
 	}
 	if (grandparent != nullptr)
 	{
@@ -187,6 +218,7 @@ red_black_node* red_black_tree::balance(red_black_node* root)
 				left_rot(parent);
 				root = parent;
 				parent = root->parent;
+				rot = "lr";
 			}
 		}
 		else if (grandparent->right != nullptr)
@@ -196,15 +228,24 @@ red_black_node* red_black_tree::balance(red_black_node* root)
 				right_rot(parent);
 				root = parent;
 				parent = root->parent;
+				rot = "rl";
 			}
 		}
 		parent->red = false;
 		grandparent->red = true;
 		if (root == parent->left)
-			return right_rot(grandparent);
+		{
+			right_rot(grandparent);
+			if (rot == "")
+				rot = "r";
+			return rot;
+		}
 		else
 		{
-			return left_rot(grandparent);
+			left_rot(grandparent);
+			if (rot == "")
+				rot = "l";
+			return rot;
 		}
 	}
 }
