@@ -50,7 +50,7 @@ public:
 	string balance(red_black_node* root);
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	vector<string> get_song_titles(red_black_node* root, vector<string> titles, string target)
+	vector<string> get_song_titles(red_black_node* root, float percent, string target);
 };
 
 
