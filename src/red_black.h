@@ -85,7 +85,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 			if (rot == "r")
 				return root->right->left;
 			else if (rot == "lr")
-				return root->parent->left->left;
+				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
 			else if (root->parent == nullptr && get_root() == root->left)
@@ -112,7 +112,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 			if (rot == "r")
 				return root->right->left;
 			else if (rot == "lr")
-				return root->parent->left->left;
+				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
 			else if (root->parent == nullptr && get_root() == root->left)
@@ -136,7 +136,7 @@ void red_black_tree::right_rot(red_black_node* root)
 	// rotation at the root
 	if (root->parent == nullptr)
 		root->left->parent = nullptr;
-	if (root->parent->right == root)
+	else if (root->parent->right == root)
 		root->parent->right = root->left;
 	else
 		root->parent->left = root->left;
