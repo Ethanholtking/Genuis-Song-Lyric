@@ -78,6 +78,8 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 		rot = balance(root->left);
 		if (rot != "" || root->parent != prev)
 		{
+			if (rot == "cr")
+				return root;
 			if (rot == "l")
 				return root->left->right;
 			if (rot == "r")
@@ -86,6 +88,10 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 				return root->parent->left->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
+			else if (root->parent == nullptr && get_root() == root->left)
+				return root->left->right;
+			else if (root->parent == nullptr && get_root() == root->right)
+				return root->right->left;
 			else if (root->parent != prev)
 				return root->parent;
 		}
@@ -99,15 +105,20 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string artist,
 		rot = balance(root->right);
 		if (rot != "" || root->parent != prev)
 		{
-			if (rot == "l") {
+			if (rot == "cr")
+				return root;
+			if (rot == "l")
 				return root->left->right;
-			}
 			if (rot == "r")
 				return root->right->left;
 			else if (rot == "lr")
 				return root->parent->left->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
+			else if (root->parent == nullptr && get_root() == root->left)
+				return root->left->right;
+			else if (root->parent == nullptr && get_root() == root->right)
+				return root->right->left;
 			else if (root->parent != prev)
 				return root->parent;
 		}
@@ -122,6 +133,9 @@ void red_black_tree::right_rot(red_black_node* root)
 	cout << "root: " << root->title << endl;
 	red_black_node* saved = root->left->right;
 	root->left->parent = root->parent;
+	// rotation at the root
+	if (root->parent == nullptr)
+		root->left->parent = nullptr;
 	if (root->parent->right == root)
 		root->parent->right = root->left;
 	else
@@ -140,8 +154,8 @@ void red_black_tree::left_rot(red_black_node* root)
 	cout << "left rotation\n";
 	cout << "root: " << root->title << endl;
 	red_black_node* saved = root->right->left;
-	//rotation at the root
 	root->right->parent = root->parent;
+	// rotation at the root
 	if (root->parent == nullptr)
 		root->right->parent = nullptr;
 	else if (root->parent->right == root)
@@ -207,7 +221,11 @@ string red_black_tree::balance(red_black_node* root)
 		parent->red = false;
 		uncle->red = false;
 		grandparent->red = true;
-		return rot;
+		rot = balance(grandparent);
+		if (rot != "")
+			return "cr";
+		else
+			return "";
 	}
 	if (grandparent != nullptr)
 	{
