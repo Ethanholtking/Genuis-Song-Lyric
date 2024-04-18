@@ -27,16 +27,16 @@ vector<vector<string>> readCSV(const string& filename) {
         stringstream ss(line);
         string cell;
 
-        // Read and discard the first cell that is just number index and artist
-        // So song title is the only thing left in the list
-        getline(ss, cell, ',');
+        // Read and discard the first cell
         getline(ss, cell, ',');
 
         // Split the line into cells using comma as delimiter
         while(getline(ss, cell, ',')){
             row.push_back(cell);
         }
+
         data.push_back(row);
+
     }
     file.close();
     return data;
@@ -75,6 +75,20 @@ int main() {
 
         // Hash set
         if(methodPick == "1"){
+            UnorderedMap map(csvData.size());
+            string title;
+            string artist;
+
+
+
+
+            for(int i=0; i<=(csvData.size()-1); i++){
+                //title = csvData.at(i).at(i+1);
+                i++;
+            }
+
+
+            //cout << artist << title << endl;
             cout << "show the result of Unordered map" << endl;
             cout << endl;
         }
