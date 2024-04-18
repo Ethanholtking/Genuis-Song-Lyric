@@ -50,6 +50,7 @@ public:
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
 	string balance(red_black_node* root);
+	red_black_node* search(red_black_node* root, string target);
 };
 
 
@@ -282,4 +283,14 @@ string red_black_tree::balance(red_black_node* root)
 			return rot;
 		}
 	}
+}
+
+red_black_node* red_black_tre::search(red_black_node* root, string target) 
+{
+	if (root->title == target)
+		return root;
+	else if (root->title < target)
+		return search(root->left, target);
+	else if (root->title > target)
+		return search(root->right, target);
 }
