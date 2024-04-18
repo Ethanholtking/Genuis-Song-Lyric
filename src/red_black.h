@@ -50,7 +50,7 @@ public:
 	string balance(red_black_node* root);
 	red_black_node* search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	vector<string> get_song_titles(red_black_node* root, vector<string> titles, string target)
+	vector<string> get_song_titles(red_black_node* root, vector<string> titles, string target);
 };
 
 
@@ -74,7 +74,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title < root->title)
 	{
 		prev = root->parent;
-		root->left = insert_node(root->left title);
+		root->left = insert_node(root->left, title);
 		// Updates the left nodes parent
 		if (root->left != nullptr)
 			root->left->parent = root;
@@ -104,7 +104,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title > root->title)
 	{
 		prev = root->parent;
-		root->right = insert_node(root->right title);
+		root->right = insert_node(root->right, title);
 		// Updates the right nodes parent
 		if (root->right != nullptr)
 			root->right->parent = root;
@@ -315,10 +315,10 @@ vector<string> red_black_tree::get_song_titles(red_black_node* root, vector<stri
 {
 	if (root != nullptr)
 	{
-		titles = get_song_titles(root->left, titles);
+		titles = get_song_titles(root->left, titles, target);
 		if(root->title.find(target))
 			titles.push_back(root->title);
-		titles = get_song_titles(root->right, titles);
+		titles = get_song_titles(root->right, titles, target);
 	}
 	return titles;
 }
