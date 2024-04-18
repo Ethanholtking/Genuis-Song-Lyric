@@ -1,14 +1,64 @@
 #import <iostream>
-#import <string>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include "red_black.h"
 #include "UnorderedMap.cpp"
 using namespace std;
+
+// Function to read csv
+vector<vector<string>> readCSV(const string& filename) {
+
+    // Define vectors to store CSV
+    vector<vector<string>> data;
+
+    // reading in file
+    ifstream file("Songs and Artists.csv");
+    if (!file.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return data;
+    }
+
+    // Read each line of the file
+    string line;
+    while(getline(file, line)){
+        vector<string> row;
+        stringstream ss(line);
+        string cell;
+
+        // Read and discard the first cell
+        std::getline(ss, cell, ',');
+
+        // Split the line into cells using comma as delimiter
+        while(getline(ss, cell, ',')){
+            row.push_back(cell);
+        }
+        data.push_back(row);
+    }
+    file.close();
+    return data;
+}
+
 
 int main() {
     bool start = true;
     string input;
     string methodPick;
     string loopEnd;
+
+    // Read in the CSV data
+    vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
+
+    /*
+    // Temp print data
+    for (const auto& row : csvData) {
+        for (const auto& cell : row) {
+            std::cout << cell << "\t";
+        }
+        std::cout << std::endl;
+    }
+     */
 
     cout << endl;
     std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
