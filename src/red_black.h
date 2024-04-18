@@ -287,6 +287,11 @@ string red_black_tree::balance(red_black_node* root)
 
 red_black_node* red_black_tre::search(red_black_node* root, string target) 
 {
+	if (root == nullptr) 
+	{
+		cout << "Unsuccesful\n";
+		return nullptr;
+	}
 	if (root->title == target)
 		return root;
 	else if (root->title < target)
