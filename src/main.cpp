@@ -27,8 +27,10 @@ vector<vector<string>> readCSV(const string& filename) {
         stringstream ss(line);
         string cell;
 
-        // Read and discard the first cell
-        std::getline(ss, cell, ',');
+        // Read and discard the first cell that is just number index and artist
+        // So song title is the only thing left in the list
+        getline(ss, cell, ',');
+        getline(ss, cell, ',');
 
         // Split the line into cells using comma as delimiter
         while(getline(ss, cell, ',')){
@@ -58,7 +60,7 @@ int main() {
         }
         std::cout << std::endl;
     }
-     */
+    */
 
     cout << endl;
     std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
