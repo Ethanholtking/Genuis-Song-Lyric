@@ -311,14 +311,14 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-vector<string> red_black_tree::get_song_titles(red_black_node* root, vector<string> titles, string target)
+vector<string> red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
 {
 	if (root != nullptr)
 	{
-		titles = get_song_titles(root->left, titles);
-		if(root->title.find(target))
-			titles.push_back(root->title);
-		titles = get_song_titles(root->right, titles);
+		percent = get_song_titles(root->left, percent, target);
+		if (root->title.find(target))
+			percent++;
+		precent = get_song_titles(root->right, precent, target);
 	}
-	return titles;
+	return percent;
 }
