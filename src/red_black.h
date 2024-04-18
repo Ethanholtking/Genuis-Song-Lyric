@@ -52,6 +52,7 @@ public:
 	string balance(red_black_node* root);
 	red_black_node* search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
+	vector<string> get_song_titles(red_black_node* root, vector<string> titles, string target)
 };
 
 
@@ -308,6 +309,18 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 		titles = in_order_traversal(root->left, titles);
 		titles.push_back(root->title);
 		titles = in_order_traversal(root->right, titles);
+	}
+	return titles;
+}
+
+vector<string> red_black_tree::get_song_titles(red_black_node* root, vector<string> titles, string target)
+{
+	if (root != nullptr)
+	{
+		titles = get_song_titles(root->left, titles);
+		if(root->title.find(target))
+			titles.push_back(root->title);
+		titles = get_song_titles(root->right, titles);
 	}
 	return titles;
 }
