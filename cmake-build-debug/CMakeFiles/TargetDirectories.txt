@@ -1,0 +1,3 @@
+C:/School/Spring 2024/Data Structures/Genuis-Song-Lyric/cmake-build-debug/CMakeFiles/Genuis_Song_Lyric.dir
+C:/School/Spring 2024/Data Structures/Genuis-Song-Lyric/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/School/Spring 2024/Data Structures/Genuis-Song-Lyric/cmake-build-debug/CMakeFiles/rebuild_cache.dir
