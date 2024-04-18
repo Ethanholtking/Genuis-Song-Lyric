@@ -48,7 +48,7 @@ public:
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
 	string balance(red_black_node* root);
-	red_black_node* search(red_black_node* root, string target);
+	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	vector<string> get_song_titles(red_black_node* root, vector<string> titles, string target)
 };
@@ -283,17 +283,15 @@ string red_black_tree::balance(red_black_node* root)
 			return rot;
 		}
 	}
-}
-
-red_black_node* red_black_tree::search(red_black_node* root, string target) 
+bool red_black_tree::search(red_black_node* root, string target) 
 {
 	if (root == nullptr) 
 	{
 		cout << "Unsuccesful\n";
-		return nullptr;
+		return false;
 	}
 	if (root->title == target)
-		return root;
+		return true;
 	else if (root->title < target)
 		return search(root->left, target);
 	else if (root->title > target)
