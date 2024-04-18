@@ -19,10 +19,10 @@ int UnorderedMap::hashFunction(std::string &title, int inputCapacity) { // add a
     return asciiTotal % inputCapacity;
 }
 
-void UnorderedMap::addSong(string title, string artist) {
-    Node node = Node(title, artist);
+void UnorderedMap::addSong(string title) {
+    Node node = Node(title);
     int hash = hashFunction(title, capacity);
-    array[hash].emplace_back(title, artist);
+    array[hash].emplace_back(title);
     size++;
     loadFactor = getLoadFactor();
     if (loadFactor >= 0.75) {
@@ -49,7 +49,7 @@ void UnorderedMap::rebuild() { // rehashes all entries with new mapsize
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
             for (auto &node: array[i]) { // iterates through list (chaining) to find song
                 int hash = hashFunction(node.title, capacity * 2);
-                newArray[hash].emplace_back(node.title, node.artist);
+                newArray[hash].emplace_back(node.title);
             }
         }
     }
