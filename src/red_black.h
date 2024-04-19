@@ -59,6 +59,8 @@ public:
 	(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
 	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_pq
 	(map<string, float>, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> most_used_words
+	(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
 };
 
 string red_black_tree::to_lower(string title)
@@ -403,4 +405,33 @@ priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<fl
 			continue;
 	}
 	return pq;
+}
+
+priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> most_used_words
+(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
+{
+	if (root != nullptr)
+	{
+		pq = most_used_words(root->left, pq);
+		pq = most_used_words(root, pq);
+		pq = most_used_words(root->right, pq);
+	}
+	return pq;
+}
+
+vector<pair<string, float>> get_most_used(priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
+{
+	vector<pair<string, float>> most_used(5);
+	vector<pair<string, float>> most_used_r(5); // Most used in reverse order
+	for (int i = 0; i < 5; i++)
+	{
+		pair<string, float> word = make_pair(pq.top().second, pq.top().first);
+		most_used_r[i] = word;
+		pq.pop();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		most_used[i] = most_used_r[most_used_r.size() - (i + 1)];
+	}
+	return most_used;
 }
