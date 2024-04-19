@@ -1,4 +1,5 @@
 #include "UnorderedMap.h"
+#include <unordered_map> // WE VERIFIED WITH A TA THAT WE ARE ALLOWED TO USE THIS - used for data calculation, does not contribute to the actual data structures that we created
 
 UnorderedMap::UnorderedMap(int inputCapacity) {
     capacity = inputCapacity;
@@ -62,21 +63,25 @@ UnorderedMap::~UnorderedMap() {
     delete[] array;
 }
 
-/*vector<pair<string, float>> UnorderedMap::mostUsedWords() {
-    vector<pair<string, float>> topFiveWords;
-    vector<pair<string, int>> allWords;
+vector<pair<string, float>> UnorderedMap::mostUsedWords() {
+    unordered_map<string, int> words;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
             for (auto &node: array[i]) { // iterates through list (chaining) to find song
                 stringstream songTitle(node.title);
                 string singleWord;
-                while (songTitle >> singleWord)
-                    for (const pair<string, int>& word : allWords)
-                        allWords.emplace_back(singleWord, 1);
+                while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+                    if (words.find(singleWord) != words.end()) {
+                        words[singleWord]++;
+                    } else {
+                        words.emplace(singleWord, 1);
+                    }
+                }
             }
         }
     }
-} */ // holding off until we get clarification from TA's
+
+}
 
 float UnorderedMap::percentSongsWithWord(string word) {
     int wordCount = 0;
