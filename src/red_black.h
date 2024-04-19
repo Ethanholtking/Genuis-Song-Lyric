@@ -43,6 +43,7 @@ public:
 	{
 		this->root = root;
 	}
+	string to_lower(string title);
 	red_black_node* insert_node(red_black_node* root, string title);
 	void right_rot(red_black_node* root);
 	void left_rot(red_black_node* root);
@@ -54,6 +55,13 @@ public:
 	float get_song_titles(red_black_node* root, float percent, string target);
 };
 
+string red_black_tree::to_lower(string title)
+{
+	for (int i = 0; i < title.length(); i++)
+		title[i] = tolower(title[i]);
+	return title;
+}
+
 red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
 	string rot;
@@ -61,6 +69,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	// If the tree is empty
 	if (this->root == nullptr)
 	{
+		title = to_lower(title);
 		red_black_node* tree_root = new red_black_node(title);
 		tree_root->red = false;
 		return tree_root;
@@ -68,6 +77,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	// inserts a node
 	if (root == nullptr)
 	{
+		title = to_lower(title);
 		return new red_black_node(title);
 	}
 	// Inserts a node to the left
