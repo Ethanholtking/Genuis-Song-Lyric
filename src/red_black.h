@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
+#include <queue>
 using namespace std;
 
 class red_black_node
@@ -53,6 +55,8 @@ public:
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
+	priority_queue<pair<string, float>> update_map(map<string, float> freq, string title, priority_queue<pair<string, float>> pq);
+	priority_queue<pair<string, float>> update_pq(map<string, float>, vector<string> added, priority_queue<pair<string, float>> pq);
 };
 
 string red_black_tree::to_lower(string title)
@@ -330,4 +334,69 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 		percent = get_song_titles(root->right, percent, target);
 	}
 	return percent;
+}
+
+priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float> freq, string title, priority_queue<pair<string, float>> pq)
+{
+	string curr = "";
+	vector<string> added;
+	for (int i = 0; i < title.length(); i++)
+	{
+		if (title[i] != (char)' ')
+			curr += title[i];
+		else
+		{
+			if (freq.find(curr) != freq.end())
+			{
+				freq[curr] += 1;
+				curr = "";
+			}
+			else
+			{
+				freq.emplace(curr, 0);
+				curr = "";
+			}
+			for (int j = 0; j < added.size(); j++)
+			{
+				if (added[j] == curr)
+					break;
+				if (j == added.size() - 1 && added[j] != curr)
+					added.push_back(curr);
+			}
+		}
+	}
+	if (freq.find(curr) != freq.end())
+	{
+		freq[curr] += 1;
+		curr = "";
+	}
+	else
+	{
+		freq.emplace(curr, 0);
+		curr = "";
+	}
+	for (int j = 0; j < added.size(); j++)
+	{
+		if (added[j] == curr)
+			break;
+		if (j == added.size() - 1 && added[j] != curr)
+			added.push_back(curr);
+	}
+	return update_pq(freq, added, pq);
+}
+priority_queue<pair<string, float>> red_black_tree::update_pq(map<string, float> freq, vector<string> added, priority_queue<pair<string, float>> pq)
+{
+	for (int i = 0; i < added.size(); i++)
+	{
+		if (pq.size() < 5)
+			pq.push(make_pair(added[i], freq[added[i]]));
+		else if (freq[added[i]] > pq.top().second)
+		{
+			pq.pop();
+			pq.push(make_pair(added[i], freq[added[i]]));
+		}
+		else
+			continue;
+	}
+	return pq;
 }
