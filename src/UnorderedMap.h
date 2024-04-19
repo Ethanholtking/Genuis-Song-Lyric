@@ -8,9 +8,8 @@ using namespace std;
 
 
 struct Node {
-    string artist;
     string title;
-    Node(string &inputTitle, string &inputArtist) {title = inputTitle; artist = inputArtist;}
+    Node(string &inputTitle) {title = inputTitle;}
 };
 
 class UnorderedMap {
@@ -24,7 +23,7 @@ public:
     ~UnorderedMap();
     float getLoadFactor();
     int hashFunction(string &title, int inputCapacity);
-    void addSong(string title, string artist);
+    void addSong(string title);
     Node* searchSong(string title);
     void rebuild();
 };
