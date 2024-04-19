@@ -3,6 +3,8 @@
 
 #import <string>
 #import <list>
+#import <vector>
+#import <sstream>
 using namespace std;
 
 
@@ -26,6 +28,8 @@ public:
     void addSong(string title);
     Node* searchSong(string title);
     void rebuild();
+    vector<pair<string, float>> mostUsedWords();
+    float percentSongsWithWord(string word);
 };
 
 

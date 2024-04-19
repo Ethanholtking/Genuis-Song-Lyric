@@ -61,3 +61,33 @@ void UnorderedMap::rebuild() { // rehashes all entries with new mapsize
 UnorderedMap::~UnorderedMap() {
     delete[] array;
 }
+
+/*vector<pair<string, float>> UnorderedMap::mostUsedWords() {
+    vector<pair<string, float>> topFiveWords;
+    vector<pair<string, int>> allWords;
+    for (int i = 0; i < capacity; i++) {
+        if (!array[i].empty()) { // ensures that title exists in array by searching for hash
+            for (auto &node: array[i]) { // iterates through list (chaining) to find song
+                stringstream songTitle(node.title);
+                string singleWord;
+                while (songTitle >> singleWord)
+                    for (const pair<string, int>& word : allWords)
+                        allWords.emplace_back(singleWord, 1);
+            }
+        }
+    }
+} */ // holding off until we get clarification from TA's
+
+float UnorderedMap::percentSongsWithWord(string word) {
+    int wordCount = 0;
+    for (int i = 0; i < capacity; i++) {
+        if (!array[i].empty()) { // ensures that title exists in array by searching for hash
+            for (auto &node: array[i]) { // iterates through list (chaining) to find song
+                if (node.title.find(word) != std::string::npos) {
+                    wordCount++;
+                }
+            }
+        }
+    }
+    return (float)wordCount / (float)size;
+}
