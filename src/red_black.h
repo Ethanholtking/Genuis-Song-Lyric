@@ -55,12 +55,11 @@ public:
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
-	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_map
-	(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	pair <priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> update_map(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
 	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_pq
 	(map<string, float>, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
 	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> most_used_words
-	(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq, map<string, float> freq);
 };
 
 string red_black_tree::to_lower(string title)
@@ -74,20 +73,17 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
 	string rot;
 	red_black_node* prev;
+	title = to_lower(title);
 	// If the tree is empty
 	if (this->root == nullptr)
 	{
-		title = to_lower(title);
 		red_black_node* tree_root = new red_black_node(title);
 		tree_root->red = false;
 		return tree_root;
 	}
 	// inserts a node
 	if (root == nullptr)
-	{
-		title = to_lower(title);
 		return new red_black_node(title);
-	}
 	// Inserts a node to the left
 	else if (title < root->title)
 	{
@@ -340,7 +336,7 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	return percent;
 }
 
-priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> red_black_tree::update_map
+pair<priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> red_black_tree::update_map
 (map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
 {
 	string curr = "";
@@ -387,7 +383,8 @@ priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<fl
 		if (j == added.size() - 1 && added[j] != curr)
 			added.push_back(curr);
 	}
-	return update_pq(freq, added, pq);
+	pq = update_pq(freq, added, pq);
+	return make_pair(pq, freq);
 }
 priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> red_black_tree::update_pq
 (map<string, float> freq, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
@@ -407,14 +404,16 @@ priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<fl
 	return pq;
 }
 
-priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> most_used_words
-(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
+priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> red_black_tree::most_used_words
+(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq, map<string, float> freq)
 {
 	if (root != nullptr)
 	{
-		pq = most_used_words(root->left, pq);
-		pq = most_used_words(root, pq);
-		pq = most_used_words(root->right, pq);
+		pq = most_used_words(root->left, pq, freq);
+		pair<priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> map_pq = update_map(freq, root->title, pq);
+		pq = map_pq.first;
+		freq = map_pq.second;
+		pq = most_used_words(root->right, pq, freq);
 	}
 	return pq;
 }
