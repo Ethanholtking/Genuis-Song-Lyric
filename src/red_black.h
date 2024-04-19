@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
@@ -50,9 +51,8 @@ public:
 	string balance(red_black_node* root);
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	vector<string> get_song_titles(red_black_node* root, float percent, string target);
+	float get_song_titles(red_black_node* root, float percent, string target);
 };
-
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
@@ -74,7 +74,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title < root->title)
 	{
 		prev = root->parent;
-		root->left = insert_node(root->left title);
+		root->left = insert_node(root->left, title);
 		// Updates the left nodes parent
 		if (root->left != nullptr)
 			root->left->parent = root;
@@ -104,7 +104,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title > root->title)
 	{
 		prev = root->parent;
-		root->right = insert_node(root->right title);
+		root->right = insert_node(root->right, title);
 		// Updates the right nodes parent
 		if (root->right != nullptr)
 			root->right->parent = root;
@@ -283,9 +283,10 @@ string red_black_tree::balance(red_black_node* root)
 			return rot;
 		}
 	}
-bool red_black_tree::search(red_black_node* root, string target) 
+}
+bool red_black_tree::search(red_black_node* root, string target)
 {
-	if (root == nullptr) 
+	if (root == nullptr)
 	{
 		cout << "Unsuccesful\n";
 		return false;
@@ -298,7 +299,7 @@ bool red_black_tree::search(red_black_node* root, string target)
 		return search(root->right, target);
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles) 
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
 {
 	if (root != nullptr)
 	{
@@ -309,14 +310,14 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-vector<string> red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
+float red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
 {
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
 		if (root->title.find(target))
 			percent++;
-		precent = get_song_titles(root->right, precent, target);
+		percent = get_song_titles(root->right, percent, target);
 	}
 	return percent;
 }
