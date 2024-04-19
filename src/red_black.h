@@ -346,6 +346,19 @@ priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float
 			curr += title[i];
 		else
 		{
+			//cout << curr << endl;
+			if (added.size() == 0)
+				added.push_back(curr);
+			else
+			{
+				for (int j = 0; j < added.size(); j++)
+				{
+					if (added[j] == curr)
+						break;
+					if (j == added.size() - 1 && added[j] != curr)
+						added.push_back(curr);
+				}
+			}
 			if (freq.find(curr) != freq.end())
 			{
 				freq[curr] += 1;
@@ -356,25 +369,12 @@ priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float
 				freq.emplace(curr, 0);
 				curr = "";
 			}
-			for (int j = 0; j < added.size(); j++)
-			{
-				if (added[j] == curr)
-					break;
-				if (j == added.size() - 1 && added[j] != curr)
-					added.push_back(curr);
-			}
 		}
 	}
 	if (freq.find(curr) != freq.end())
-	{
 		freq[curr] += 1;
-		curr = "";
-	}
 	else
-	{
 		freq.emplace(curr, 0);
-		curr = "";
-	}
 	for (int j = 0; j < added.size(); j++)
 	{
 		if (added[j] == curr)
