@@ -55,8 +55,10 @@ public:
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
-	priority_queue<pair<string, float>> update_map(map<string, float> freq, string title, priority_queue<pair<string, float>> pq);
-	priority_queue<pair<string, float>> update_pq(map<string, float>, vector<string> added, priority_queue<pair<string, float>> pq);
+	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_map
+	(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_pq
+	(map<string, float>, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
 };
 
 string red_black_tree::to_lower(string title)
@@ -336,7 +338,8 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	return percent;
 }
 
-priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float> freq, string title, priority_queue<pair<string, float>> pq)
+priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> red_black_tree::update_map
+(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
 {
 	string curr = "";
 	vector<string> added;
@@ -366,7 +369,7 @@ priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float
 			}
 			else
 			{
-				freq.emplace(curr, 0);
+				freq.emplace(curr, 1);
 				curr = "";
 			}
 		}
@@ -374,7 +377,7 @@ priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float
 	if (freq.find(curr) != freq.end())
 		freq[curr] += 1;
 	else
-		freq.emplace(curr, 0);
+		freq.emplace(curr, 1);
 	for (int j = 0; j < added.size(); j++)
 	{
 		if (added[j] == curr)
@@ -384,16 +387,17 @@ priority_queue<pair<string, float>> red_black_tree::update_map(map<string, float
 	}
 	return update_pq(freq, added, pq);
 }
-priority_queue<pair<string, float>> red_black_tree::update_pq(map<string, float> freq, vector<string> added, priority_queue<pair<string, float>> pq)
+priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> red_black_tree::update_pq
+(map<string, float> freq, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq)
 {
 	for (int i = 0; i < added.size(); i++)
 	{
 		if (pq.size() < 5)
-			pq.push(make_pair(added[i], freq[added[i]]));
-		else if (freq[added[i]] > pq.top().second)
+			pq.push(make_pair(freq[added[i]], added[i]));
+		else if (freq[added[i]] > pq.top().first)
 		{
 			pq.pop();
-			pq.push(make_pair(added[i], freq[added[i]]));
+			pq.push(make_pair(freq[added[i]], added[i]));
 		}
 		else
 			continue;
