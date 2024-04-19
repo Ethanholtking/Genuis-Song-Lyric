@@ -29,7 +29,7 @@ public:
     Node* searchSong(string title);
     void rebuild();
     vector<pair<string, float>> mostUsedWords();
-    float percentSongsWithWord(string &word);
+    float percentSongsWithWord(string word);
 };
 
 

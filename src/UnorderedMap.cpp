@@ -78,7 +78,7 @@ UnorderedMap::~UnorderedMap() {
     }
 } */ // holding off until we get clarification from TA's
 
-float UnorderedMap::percentSongsWithWord(std::string &word) {
+float UnorderedMap::percentSongsWithWord(string word) {
     int wordCount = 0;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
