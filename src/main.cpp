@@ -120,7 +120,6 @@ int main() {
                  << "ms!" << endl;
         }
 
-        // FIXME Not able to print the title of node when found in search song in UnOrdered cpp
         else if (methodPick == "3") {
             string findTitle;
             std::cout << "Please enter the song to search:";
