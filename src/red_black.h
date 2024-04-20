@@ -322,7 +322,7 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-		if (root->title.find(target))
+		if (root->title.find(target) != root->title.npos)
 			percent++;
 		percent = get_song_titles(root->right, percent, target);
 	}
