@@ -65,14 +65,14 @@ int main() {
     }
 
     cout << endl;
-    std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
+    std::cout << "Welcome to the Genius Song Title Search!\n" << std::endl;
     while(start){
 
 
         std::cout << "Which function would you like to use?" << endl;
-        cout << "1. Most used words in song titles\n 2. % of total songs that include specific word\n"
-                "3. Search for a song\n 4. Quit\n" << endl;
-        cout << "(Type 1, 2, 3, or 4):";
+        cout << "1. Most used words in song titles\n2. % of total songs that include specific word\n"
+                "3. Search for a song\n4. Quit\n" << endl;
+        cout << "(Type 1, 2, 3, or 4): ";
         cin >> methodPick;
 
         if (methodPick == "1") {
@@ -88,6 +88,7 @@ int main() {
         }
         else {
             start = false;
+            break;
         }
 
 
