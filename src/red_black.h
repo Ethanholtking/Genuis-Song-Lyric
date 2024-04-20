@@ -74,7 +74,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title < root->title)
 	{
 		prev = root->parent;
-		root->left = insert_node(root->left title);
+		root->left = insert_node(root->left, title);
 		// Updates the left nodes parent
 		if (root->left != nullptr)
 			root->left->parent = root;
@@ -104,7 +104,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title > root->title)
 	{
 		prev = root->parent;
-		root->right = insert_node(root->right title);
+		root->right = insert_node(root->right, title);
 		// Updates the right nodes parent
 		if (root->right != nullptr)
 			root->right->parent = root;

@@ -1,10 +1,10 @@
 #import <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include "red_black.h"
-#include "UnorderedMap.cpp"
+#import <fstream>
+#import <sstream>
+#import <string>
+#import <vector>
+#import "red_black.h"
+#import "UnorderedMap.cpp"
 using namespace std;
 
 // Function to read csv
@@ -35,14 +35,11 @@ vector<vector<string>> readCSV(const string& filename) {
         while(getline(ss, cell, ',')){
             row.push_back(cell);
         }
-
         data.push_back(row);
-
     }
     file.close();
     return data;
 }
-
 
 int main() {
     bool start = true;
@@ -66,8 +63,6 @@ int main() {
     cout << endl;
     std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
     while(start){
-
-
         std::cout << "Which function would you like to use?" << endl;
         cout << "1. Most used words in song titles\n 2. % of total songs that include specific word\n"
                 "3. Search for a song\n 4. Quit\n" << endl;
@@ -88,8 +83,6 @@ int main() {
         else {
             start = false;
         }
-
-
         // Ask user if they want to search again
         cout << "Would you like to use again? (Y for yes N for no):";
         cin >> loopEnd;
@@ -98,4 +91,5 @@ int main() {
         }
     }
     cout << "Thank you for using Genius Title Search!" << endl;
+    return 0;
 }
