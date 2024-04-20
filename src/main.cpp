@@ -1,10 +1,11 @@
 #import <iostream>
-#import <fstream>
-#import <sstream>
-#import <string>
-#import <vector>
-#import "red_black.h"
-#import "UnorderedMap.cpp"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "red_black.h"
+#include "UnorderedMap.cpp"
+#include <chrono>
 using namespace std;
 
 // Function to read csv
@@ -35,11 +36,14 @@ vector<vector<string>> readCSV(const string& filename) {
         while(getline(ss, cell, ',')){
             row.push_back(cell);
         }
+
         data.push_back(row);
+
     }
     file.close();
     return data;
 }
+
 
 int main() {
     bool start = true;
@@ -48,25 +52,33 @@ int main() {
     string loopEnd;
 
     // Read in the CSV data
+
     vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
+    // FIXME: I checked and each vector<string> within the vector only has one element in it, is data being read in correctly?
 
     // insert data to hash map
-    UnorderedMap map(csvData.size());
-    string title;
+    auto timeStart = chrono::high_resolution_clock::now();
+    UnorderedMap map(16);
 
-    for(const auto& element : csvData){
+    for(const auto& element : csvData){ // FIXME: i believe this is adding each entry as a title, including artist name?
         for(const auto& str : element) {
             map.addSong(str);
         }
     }
+    auto timeEnd = chrono::high_resolution_clock::now();
+    auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+
+    cout << "Loaded Unordered Map (Hash Table) in " << timeToExecute.count() << "ms!" << endl;
 
     cout << endl;
-    std::cout << "Welcome to the Genius Song Title Search!" << std::endl;
+    std::cout << "Welcome to the Genius Song Title Search!\n" << std::endl;
     while(start){
+
+
         std::cout << "Which function would you like to use?" << endl;
-        cout << "1. Most used words in song titles\n 2. % of total songs that include specific word\n"
-                "3. Search for a song\n 4. Quit\n" << endl;
-        cout << "(Type 1, 2, 3, or 4):";
+        cout << "1. Most used words in song titles\n2. % of total songs that include specific word\n"
+                "3. Search for a song\n4. Quit\n" << endl;
+        cout << "(Type 1, 2, 3, or 4): ";
         cin >> methodPick;
 
         if (methodPick == "1") {
@@ -82,7 +94,10 @@ int main() {
         }
         else {
             start = false;
+            break;
         }
+
+
         // Ask user if they want to search again
         cout << "Would you like to use again? (Y for yes N for no):";
         cin >> loopEnd;
@@ -91,5 +106,4 @@ int main() {
         }
     }
     cout << "Thank you for using Genius Title Search!" << endl;
-    return 0;
 }

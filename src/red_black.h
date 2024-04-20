@@ -1,5 +1,8 @@
 #include <iostream>
+#include <vector>
 #include <string>
+#include <map>
+#include <queue>
 using namespace std;
 
 class red_black_node
@@ -42,6 +45,7 @@ public:
 	{
 		this->root = root;
 	}
+	string to_lower(string title);
 	red_black_node* insert_node(red_black_node* root, string title);
 	void right_rot(red_black_node* root);
 	void left_rot(red_black_node* root);
@@ -50,14 +54,24 @@ public:
 	string balance(red_black_node* root);
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	vector<string> get_song_titles(red_black_node* root, float percent, string target);
+	float get_song_titles(red_black_node* root, float percent, string target);
+	map<string, float> update_map(map<string, float> freq, string title);
+	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
+	vector<pair<string, float>> most_used_words(map<string, float> freq);
 };
 
+string red_black_tree::to_lower(string title)
+{
+	for (int i = 0; i < title.length(); i++)
+		title[i] = tolower(title[i]);
+	return title;
+}
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
 	string rot;
 	red_black_node* prev;
+	title = to_lower(title);
 	// If the tree is empty
 	if (this->root == nullptr)
 	{
@@ -67,9 +81,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	}
 	// inserts a node
 	if (root == nullptr)
-	{
 		return new red_black_node(title);
-	}
 	// Inserts a node to the left
 	else if (title < root->title)
 	{
@@ -283,9 +295,10 @@ string red_black_tree::balance(red_black_node* root)
 			return rot;
 		}
 	}
-bool red_black_tree::search(red_black_node* root, string target) 
+}
+bool red_black_tree::search(red_black_node* root, string target)
 {
-	if (root == nullptr) 
+	if (root == nullptr)
 	{
 		cout << "Unsuccesful\n";
 		return false;
@@ -298,7 +311,7 @@ bool red_black_tree::search(red_black_node* root, string target)
 		return search(root->right, target);
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles) 
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
 {
 	if (root != nullptr)
 	{
@@ -309,14 +322,84 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-vector<string> red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
+float red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
 {
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
 		if (root->title.find(target))
 			percent++;
-		precent = get_song_titles(root->right, precent, target);
+		percent = get_song_titles(root->right, percent, target);
 	}
 	return percent;
+}
+
+map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
+{
+	string curr = "";
+	for (int i = 0; i < title.length(); i++)
+	{
+		if (title[i] != (char)' ')
+			curr += title[i];
+		else
+		{
+			if (freq.find(curr) != freq.end())
+			{
+				freq[curr] += 1;
+				curr = "";
+			}
+			else
+			{
+				freq.emplace(curr, 1);
+				curr = "";
+			}
+		}
+	}
+	if (freq.find(curr) != freq.end())
+		freq[curr] += 1;
+	else
+		freq.emplace(curr, 1);
+	return freq;
+}
+
+map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<string, float> freq)
+{
+	if (root != nullptr)
+	{
+		freq = freq_of_words(root->left, freq);
+		freq = update_map(freq, root->title);
+		freq = freq_of_words(root->right, freq);
+	}
+	return freq;
+}
+
+vector<pair<string, float>> red_black_tree::most_used_words(map<string, float> freq)
+{
+	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq;
+	auto it = freq.begin();
+	for (; it != freq.end(); ++it)
+	{
+		if (pq.size() < 5)
+			pq.emplace(make_pair(it->second, it->first));
+		else if (it->second > pq.top().first)
+		{
+			pq.pop();
+			pq.emplace(make_pair(it->second, it->first));
+		}
+		else
+			continue;
+	}
+	vector<pair<string, float>> most_used(5);
+	vector<pair<string, float>> most_used_r(5); // Most used in reverse order
+	for (int i = 0; i < 5; i++)
+	{
+		pair<string, float> word = make_pair(pq.top().second, pq.top().first);
+		most_used_r[i] = word;
+		pq.pop();
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		most_used[i] = most_used_r[most_used_r.size() - (i + 1)];
+	}
+	return most_used;
 }
