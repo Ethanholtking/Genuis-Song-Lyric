@@ -30,8 +30,7 @@ void UnorderedMap::addSong(string title) {
         rebuild();
     }
 }
-// FIXME doesnt return node with song title when found
-// **Problem is found in the parameter input and only taking in the first word of the input
+
 Node* UnorderedMap::searchSong(std::string title) {
     int hash = hashFunction(title, capacity);
     if (!array[hash].empty()) { // ensures that title exists in array by searching for hash
