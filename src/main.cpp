@@ -5,6 +5,7 @@
 #include <vector>
 #include "red_black.h"
 #include "UnorderedMap.cpp"
+#include <chrono>
 using namespace std;
 
 // Function to read csv
@@ -52,12 +53,12 @@ int main() {
 
     // Read in the CSV data
     vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
+    // FIXME: I checked and each vector<string> within the vector only has one element in it, is data being read in correctly?
 
     // insert data to hash map
-    UnorderedMap map(csvData.size());
-    string title;
+    UnorderedMap map(16);
 
-    for(const auto& element : csvData){
+    for(const auto& element : csvData){ // FIXME: i believe this is adding each entry as a title, including artist name?
         for(const auto& str : element) {
             map.addSong(str);
         }
