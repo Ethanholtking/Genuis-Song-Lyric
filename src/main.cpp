@@ -9,10 +9,10 @@
 using namespace std;
 
 // Function to read csv
-vector<vector<string>> readCSV(const string& filename) {
+vector<string> readCSV(const string& filename) {
 
     // Define vectors to store CSV
-    vector<vector<string>> data;
+    vector<string> data;
 
     // reading in file
     ifstream file("Songs and Artists.csv");
@@ -24,7 +24,7 @@ vector<vector<string>> readCSV(const string& filename) {
     // Read each line of the file
     string line;
     while(getline(file, line)){
-        vector<string> row;
+        //vector<string> row;
         stringstream ss(line);
         string cell;
 
@@ -33,14 +33,14 @@ vector<vector<string>> readCSV(const string& filename) {
         getline(ss, cell, ',');
 
         // Split the line into cells using comma as delimiter
-        while(getline(ss, cell, ',')){
-            row.push_back(cell);
-        }
+        getline(ss, cell, ',');
 
-        data.push_back(row);
+        data.push_back(cell);
+
 
     }
     file.close();
+    //cout << data << endl;
     return data;
 }
 
@@ -52,18 +52,14 @@ int main() {
     string loopEnd;
 
     // Read in the CSV data
-
-    vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
-    // FIXME: I checked and each vector<string> within the vector only has one element in it, is data being read in correctly?
+    vector<string> csvData = readCSV("Songs and Artists.csv");
 
     // insert data to hash map
     auto timeStart = chrono::high_resolution_clock::now();
     UnorderedMap map(16);
 
-    for(const auto& element : csvData){ // FIXME: i believe this is adding each entry as a title, including artist name?
-        for(const auto& str : element) {
-            map.addSong(str);
-        }
+    for(const auto& element : csvData){
+        map.addSong(element);
     }
     auto timeEnd = chrono::high_resolution_clock::now();
     auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
