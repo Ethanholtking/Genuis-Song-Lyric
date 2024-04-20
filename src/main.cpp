@@ -50,9 +50,8 @@ int main() {
     // Read in the CSV data
     vector<string> csvData = readCSV("Songs and Artists.csv");
 
-    // Chrono timer
+    // Chrono timer for hashmap
     auto timeStart = chrono::high_resolution_clock::now();
-
     // insert data to hash map
     UnorderedMap map(16);
     for(const auto& element : csvData){
@@ -61,8 +60,23 @@ int main() {
     auto timeEnd = chrono::high_resolution_clock::now();
     auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
+    /*
+    // Insert to tree
+    auto newTimeStart = chrono::high_resolution_clock::now();
+    red_black_tree tree = red_black_tree();
+    for(const auto& element : csvData){
+        tree.set_root(tree.insert_node(tree.get_root(), element));
+    }
+    auto newTimeEnd = chrono::high_resolution_clock::now();
+    auto newTimeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+    */
+
+    // Show results
     cout << "Loaded Unordered Map (Hash Table) in " << timeToExecute.count() << "ms!" << endl;
+    //cout << "Loaded Ordered Map (Red Black Tree) in " << newTimeToExecute.count() << "ms!" << endl;
     cout << endl;
+
+    // Start Menu
     std::cout << "Welcome to the Genius Song Title Search!\n";
     while(start){
         cout << std::endl;
@@ -73,6 +87,7 @@ int main() {
         cin >> methodPick;
         cout << endl;
 
+        // Most used words
         if (methodPick == "1") {
             cout << "Showing most used words in song titles:" << endl;
             // Chrono timer
@@ -88,6 +103,7 @@ int main() {
             cout << "Finding most used words in song titles in Unordered Map (Hash Table) in " << timeToExecute.count()
                  << "ms!" << endl;
         }
+        // % word used
         else if (methodPick == "2") {
             string word;
             float percentRes;
@@ -109,21 +125,20 @@ int main() {
             string findTitle;
             std::cout << "Please enter the song to search:";
             getline(cin >> std::ws, findTitle); // string to be searched in song list
-            cout << findTitle << endl;
 
             auto timeStart = chrono::high_resolution_clock::now();
             Node* songFound = map.searchSong(findTitle);
             auto timeEnd = chrono::high_resolution_clock::now();
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
-            cout << "Finding song title in Unordered Map (Hash Table) in " << timeToExecute.count()
-                 << "ms!" << endl;
             if (songFound != nullptr) {
                 cout << songFound->title  << " was found in the database!" << endl;
             }
             else{
                 cout << "Song is not in database!" << endl;
             }
+            cout << "Finding song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+                 << "ms!" << endl;
         }
         else {
             start = false;
