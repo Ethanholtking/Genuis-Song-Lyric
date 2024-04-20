@@ -52,17 +52,9 @@ public:
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
 	string balance(red_black_node* root);
-	bool search(red_black_node* root, string target);
+	string search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
-	/*
-	pair <priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> update_map
-	(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
-	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_pq
-	(map<string, float>, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
-	pair<priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> most_used_words
-	(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq, map<string, float> freq);
-	*/
 	map<string, float> update_map(map<string, float> freq, string title);
 	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
 	vector<pair<string, float>> most_used_words(map<string, float> freq);
@@ -302,15 +294,12 @@ string red_black_tree::balance(red_black_node* root)
 	}
 	return rot;
 }
-bool red_black_tree::search(red_black_node* root, string target)
+string red_black_tree::search(red_black_node* root, string target)
 {
 	if (root == nullptr)
-	{
-		cout << "Unsuccesful\n";
-		return false;
-	}
+		return "";
 	if (root->title == target)
-		return true;
+		return target;
 	else if (root->title < target)
 		return search(root->left, target);
 	else if (root->title > target)
