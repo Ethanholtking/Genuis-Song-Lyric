@@ -5,7 +5,7 @@
 #include <queue>
 using namespace std;
 
-class red_black_node
+struct red_black_node
 {
 public:
 	// Variables for the node
@@ -26,10 +26,10 @@ public:
 	}
 };
 
-class red_black_tree
+struct red_black_tree
 {
 	red_black_node* root;
-public:
+
 	//Constructor
 	red_black_tree()
 	{
@@ -44,6 +44,19 @@ public:
 	void set_root(red_black_node* root)
 	{
 		this->root = root;
+	}
+	// Desturctor from clemson uni
+	~red_black_tree()
+	{
+		deleteTree(root);
+	}
+	void deleteTree(red_black_node* curr)
+	{
+		if (curr == nullptr)
+			return;
+		deleteTree(curr->left);
+		deleteTree(curr->right);
+		delete curr;
 	}
 	string to_lower(string title);
 	red_black_node* insert_node(red_black_node* root, string title);
@@ -322,7 +335,7 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-		if (root->title.find(target) != root->title.npos)
+		if (root->title.find(target))
 			percent++;
 		percent = get_song_titles(root->right, percent, target);
 	}
