@@ -90,6 +90,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
         pQueue.pop();
         topFive.emplace_back(greatestWord.second, ((float)greatestWord.first / (float)capacity));
     }
+    return topFive;
 }
 
 float UnorderedMap::percentSongsWithWord(string word) {
