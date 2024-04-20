@@ -52,10 +52,12 @@ int main() {
     string loopEnd;
 
     // Read in the CSV data
+
     vector<vector<string>> csvData = readCSV("Songs and Artists.csv");
     // FIXME: I checked and each vector<string> within the vector only has one element in it, is data being read in correctly?
 
     // insert data to hash map
+    auto timeStart = chrono::high_resolution_clock::now();
     UnorderedMap map(16);
 
     for(const auto& element : csvData){ // FIXME: i believe this is adding each entry as a title, including artist name?
@@ -63,6 +65,10 @@ int main() {
             map.addSong(str);
         }
     }
+    auto timeEnd = chrono::high_resolution_clock::now();
+    auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+
+    cout << "Loaded Unordered Map (Hash Table) in " << timeToExecute.count() << "ms!" << endl;
 
     cout << endl;
     std::cout << "Welcome to the Genius Song Title Search!\n" << std::endl;
