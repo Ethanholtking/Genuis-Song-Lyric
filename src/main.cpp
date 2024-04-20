@@ -108,7 +108,20 @@ int main() {
         else if (methodPick == "3") {
             std::cout << "Please enter the song to search:";
             cin >> input; // string to be searched in song list
-            cout << endl;
+            //cout << endl;
+            auto timeStart = chrono::high_resolution_clock::now();
+            Node* songFound = map.searchSong(input);
+            auto timeEnd = chrono::high_resolution_clock::now();
+            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+
+            cout << "Finding song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+                 << "ms!" << endl;
+            if (songFound != nullptr) {
+                cout << songFound->title  << " was found in the database!" << endl;
+            }
+            else{
+                cout << "Song is not in database!" << endl;
+            }
         }
         else {
             start = false;
@@ -116,6 +129,7 @@ int main() {
         }
 
         // Ask user if they want to search again
+        cout << endl;
         cout << "Would you like to use again? (Y for yes N for no):";
         cin >> loopEnd;
         if(loopEnd == "n" || loopEnd == "N"){
