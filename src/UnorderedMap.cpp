@@ -88,7 +88,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
     for (int i = 0; i < 5; i++) {
         pair<int, string> greatestWord = pQueue.top();
         pQueue.pop();
-        topFive.emplace_back(greatestWord.second, ((float)greatestWord.first / (float)capacity));
+        topFive.emplace_back(greatestWord.second, ((float)greatestWord.first / (float)size));
     }
     return topFive;
 }
