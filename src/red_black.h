@@ -55,6 +55,14 @@ public:
 	bool search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
+	/*
+	pair <priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> update_map
+	(map<string, float> freq, string title, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> update_pq
+	(map<string, float>, vector<string> added, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq);
+	pair<priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>>, map<string, float>> most_used_words
+	(red_black_node* root, priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq, map<string, float> freq);
+	*/
 	map<string, float> update_map(map<string, float> freq, string title);
 	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
 	vector<pair<string, float>> most_used_words(map<string, float> freq);
@@ -71,6 +79,8 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
 	string rot;
 	red_black_node* prev;
+	red_black_node* prev_left;
+	red_black_node* prev_right;
 	title = to_lower(title);
 	// If the tree is empty
 	if (this->root == nullptr)
@@ -86,16 +96,16 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title < root->title)
 	{
 		prev = root->parent;
+		prev_left = root->left;
+		prev_right = root->right;
 		root->left = insert_node(root->left, title);
 		// Updates the left nodes parent
 		if (root->left != nullptr)
 			root->left->parent = root;
 		rot = balance(root->left);
 		// Changes the return node if a rotation occured
-		if (rot != "" || root->parent != prev)
+		if (rot != "" || root->parent != prev || root->right != prev_right || root->left != prev_left)
 		{
-			if (rot == "cr")
-				return root;
 			if (rot == "l")
 				return root->left->right;
 			if (rot == "r")
@@ -116,16 +126,16 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	else if (title > root->title)
 	{
 		prev = root->parent;
+		prev_left = root->left;
+		prev_right = root->right;
 		root->right = insert_node(root->right, title);
 		// Updates the right nodes parent
 		if (root->right != nullptr)
 			root->right->parent = root;
 		rot = balance(root->right);
 		// Changes the return node if a rotation occured
-		if (rot != "" || root->parent != prev)
+		if (rot != "" || root->parent != prev || root->left != prev_left || root->right != prev_right)
 		{
-			if (rot == "cr")
-				return root;
 			if (rot == "l")
 				return root->left->right;
 			if (rot == "r")
@@ -243,13 +253,8 @@ string red_black_tree::balance(red_black_node* root)
 		parent->red = false;
 		uncle->red = false;
 		grandparent->red = true;
-		rot = balance(grandparent);
-		if (rot != "")
-			return "cr";
-		else
-			return "";
 	}
-	if (grandparent != nullptr)
+	else if (grandparent != nullptr)
 	{
 		if (grandparent->left != nullptr)
 		{
@@ -295,6 +300,7 @@ string red_black_tree::balance(red_black_node* root)
 			return rot;
 		}
 	}
+	return rot;
 }
 bool red_black_tree::search(red_black_node* root, string target)
 {
