@@ -6,6 +6,7 @@
 #include "red_black.h"
 #include "UnorderedMap.cpp"
 #include <chrono>
+#include <iomanip>
 using namespace std;
 
 // Function to read csv
@@ -34,13 +35,9 @@ vector<string> readCSV(const string& filename) {
 
         // Split the line into cells using comma as delimiter
         getline(ss, cell, ',');
-
         data.push_back(cell);
-
-
     }
     file.close();
-    //cout << data << endl;
     return data;
 }
 
@@ -50,14 +47,16 @@ int main() {
     string input;
     string methodPick;
     string loopEnd;
+    cout << endl;
 
     // Read in the CSV data
     vector<string> csvData = readCSV("Songs and Artists.csv");
 
-    // insert data to hash map
+    // Chrono timer
     auto timeStart = chrono::high_resolution_clock::now();
-    UnorderedMap map(16);
 
+    // insert data to hash map
+    UnorderedMap map(16);
     for(const auto& element : csvData){
         map.addSong(element);
     }
@@ -65,23 +64,46 @@ int main() {
     auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
     cout << "Loaded Unordered Map (Hash Table) in " << timeToExecute.count() << "ms!" << endl;
-
     cout << endl;
-    std::cout << "Welcome to the Genius Song Title Search!\n" << std::endl;
+    std::cout << "Welcome to the Genius Song Title Search!\n";
     while(start){
-
-
+        cout << std::endl;
         std::cout << "Which function would you like to use?" << endl;
         cout << "1. Most used words in song titles\n2. % of total songs that include specific word\n"
-                "3. Search for a song\n4. Quit\n" << endl;
-        cout << "(Type 1, 2, 3, or 4): ";
+                "3. Search for a song\n4. Quit\n";
+        cout << "(Type 1, 2, 3, or 4):";
         cin >> methodPick;
+        cout << endl;
 
         if (methodPick == "1") {
-            cout << "find most used song titles" << endl;
+            cout << "Showing most used words in song titles:" << endl;
+            // Chrono timer
+            auto timeStart = chrono::high_resolution_clock::now();
+            vector<pair<string, float>> top5 = map.mostUsedWords();
+            auto timeEnd = chrono::high_resolution_clock::now();
+            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+
+            for (int i = 0; i < 5; i++) {
+                cout << i + 1 << ": " << top5[i].first << " (" << setprecision(4) << top5[i].second * 100 << "%)"
+                     << endl;
+            }
+            cout << "Finding most used words in song titles in Unordered Map (Hash Table) in " << timeToExecute.count()
+                 << "ms!" << endl;
         }
         else if (methodPick == "2") {
-            cout << "find % of total songs" << endl;
+            string word;
+            float percentRes;
+            cout << "Please enter a word you would like to search:";
+            cin >> word;
+            cout << endl;
+            auto timeStart = chrono::high_resolution_clock::now();
+            percentRes = map.percentSongsWithWord(word); //FIXME not sure if it is outputing the correct percentage
+            auto timeEnd = chrono::high_resolution_clock::now();
+            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+
+            cout << "Percentage the word \"" << word << "\" was used in song titles: " << percentRes << "%" << endl;
+            cout << "Finding percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+                 << "ms!" << endl;
         }
         else if (methodPick == "3") {
             std::cout << "Please enter the song to search:";
@@ -92,7 +114,6 @@ int main() {
             start = false;
             break;
         }
-
 
         // Ask user if they want to search again
         cout << "Would you like to use again? (Y for yes N for no):";
