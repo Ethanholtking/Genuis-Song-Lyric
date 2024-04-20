@@ -80,7 +80,16 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
             }
         }
     }
-
+    priority_queue<pair<int, string>> pQueue;
+    for (auto &word : words) {
+        pQueue.emplace(word.second, word.first);
+    }
+    vector<pair<string, float>> topFive;
+    for (int i = 0; i < 5; i++) {
+        pair<int, string> greatestWord = pQueue.top();
+        pQueue.pop();
+        topFive.emplace_back(greatestWord.second, ((float)greatestWord.first / (float)capacity));
+    }
 }
 
 float UnorderedMap::percentSongsWithWord(string word) {
