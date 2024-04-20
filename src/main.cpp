@@ -40,8 +40,6 @@ vector<string> readCSV(const string& filename) {
     file.close();
     return data;
 }
-
-
 int main() {
     bool start = true;
     string input;
@@ -105,12 +103,16 @@ int main() {
             cout << "Finding percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecute.count()
                  << "ms!" << endl;
         }
+
+        // FIXME Not able to print the title of node when found in search song in UnOrdered cpp
         else if (methodPick == "3") {
+            string findTitle;
             std::cout << "Please enter the song to search:";
-            cin >> input; // string to be searched in song list
-            //cout << endl;
+            getline(cin >> std::ws, findTitle); // string to be searched in song list
+            cout << findTitle << endl;
+
             auto timeStart = chrono::high_resolution_clock::now();
-            Node* songFound = map.searchSong(input);
+            Node* songFound = map.searchSong(findTitle);
             auto timeEnd = chrono::high_resolution_clock::now();
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
@@ -127,7 +129,6 @@ int main() {
             start = false;
             break;
         }
-
         // Ask user if they want to search again
         cout << endl;
         cout << "Would you like to use again? (Y for yes N for no):";
