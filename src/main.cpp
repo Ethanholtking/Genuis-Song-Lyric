@@ -136,7 +136,7 @@ int main() {
             else{
                 cout << "Song is not in database!" << endl;
             }
-            cout << "Found song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+            cout << "Search function in Unordered Map (Hash Table) performed in " << timeToExecute.count()
                  << "ms!" << endl;
         }
         else {
