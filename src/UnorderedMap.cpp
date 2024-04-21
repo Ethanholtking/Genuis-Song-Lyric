@@ -40,6 +40,7 @@ void UnorderedMap::addSong(string title) {
 }
 
 Node* UnorderedMap::searchSong(std::string title) {
+    title = toLower(title);
     int hash = hashFunction(title, capacity);
     if (!array[hash].empty()) { // ensures that title exists in array by searching for hash
         for (auto & node : array[hash]) { // iterates through list (chaining) to find song
@@ -108,6 +109,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
 
 // FIXME Check
 float UnorderedMap::percentSongsWithWord(string word) {
+    word = toLower(word);
     int wordCount = 0;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
