@@ -111,7 +111,7 @@ int main() {
             cin >> word;
             cout << endl;
             auto timeStart = chrono::high_resolution_clock::now();
-            percentRes = map.percentSongsWithWord(word); //FIXME not sure if it is outputing the correct percentage
+            percentRes = map.percentSongsWithWord(word);
             auto timeEnd = chrono::high_resolution_clock::now();
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
@@ -143,12 +143,21 @@ int main() {
             break;
         }
         // Ask user if they want to search again
-        cout << endl;
-        cout << "Would you like to use again? (Y for yes N for no):";
-        cin >> loopEnd;
-        if(loopEnd == "n" || loopEnd == "N"){
-            start = false;
+        bool quitSelection = false;
+        while (!quitSelection) {
+            cout << endl;
+            cout << "Would you like to use again? (Y for yes, N for no): ";
+            cin >> loopEnd;
+            if (loopEnd == "n" || loopEnd == "N"){
+                start = false;
+                quitSelection = true;
+            } else if (loopEnd == "y" || loopEnd == "Y") {
+                quitSelection = true;
+            } else {
+                cout << "Invalid input." << endl;
+            }
         }
+
     }
     cout << "Thank you for using Genius Title Search!" << endl;
 }
