@@ -108,6 +108,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
 
 // FIXME Check
 float UnorderedMap::percentSongsWithWord(string word) {
+    word = toLower(word);
     int wordCount = 0;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
