@@ -109,7 +109,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 			root->left->parent = root;
 		rot = balance(root->left);
 		// Changes the return node if a rotation occured
-		if (rot != "" || root->parent != prev || root->right != prev_right || root->left != prev_left)
+		if (rot != "")
 		{
 			if (rot == "l")
 				return root->left->right;
@@ -119,12 +119,6 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
-			else if (root->parent == nullptr && get_root() == root->left)
-				return root->left->right;
-			else if (root->parent == nullptr && get_root() == root->right)
-				return root->right->left;
-			else if (root->parent != prev)
-				return root->parent;
 		}
 	}
 	// Inserts a node to the right
@@ -139,7 +133,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 			root->right->parent = root;
 		rot = balance(root->right);
 		// Changes the return node if a rotation occured
-		if (rot != "" || root->parent != prev || root->left != prev_left || root->right != prev_right)
+		if (rot != "")
 		{
 			if (rot == "l")
 				return root->left->right;
@@ -149,12 +143,6 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
-			else if (root->parent == nullptr && get_root() == root->left)
-				return root->left->right;
-			else if (root->parent == nullptr && get_root() == root->right)
-				return root->right->left;
-			else if (root->parent != prev)
-				return root->parent;
 		}
 	}
 	return root;
