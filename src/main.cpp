@@ -111,7 +111,7 @@ int main() {
             cin >> word;
             cout << endl;
             auto timeStart = chrono::high_resolution_clock::now();
-            percentRes = map.percentSongsWithWord(word); //FIXME not sure if it is outputing the correct percentage
+            percentRes = map.percentSongsWithWord(word);
             auto timeEnd = chrono::high_resolution_clock::now();
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
