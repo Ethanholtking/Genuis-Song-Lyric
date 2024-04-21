@@ -5,6 +5,7 @@
 #import <list>
 #import <vector>
 #import <sstream>
+#import <algorithm>
 using namespace std;
 
 
@@ -30,6 +31,9 @@ public:
     void rebuild();
     vector<pair<string, float>> mostUsedWords();
     float percentSongsWithWord(string word);
+    string toLower(string &title);
+    int getSize() {return size;};
+    int getCapacity() {return capacity;};
 };
 
 

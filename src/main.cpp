@@ -97,10 +97,10 @@ int main() {
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
             for (int i = 0; i < 5; i++) {
-                cout << i + 1 << ": " << top5[i].first << " (" << setprecision(4) << top5[i].second * 100 << "%)"
+                cout << i + 1 << ": " << top5[i].first << " (" << setprecision(2) << fixed << top5[i].second * 100 << "%)"
                      << endl;
             }
-            cout << "Finding most used words in song titles in Unordered Map (Hash Table) in " << timeToExecute.count()
+            cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecute.count()
                  << "ms!" << endl;
         }
         // % word used
@@ -115,8 +115,8 @@ int main() {
             auto timeEnd = chrono::high_resolution_clock::now();
             auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
 
-            cout << "Percentage the word \"" << word << "\" was used in song titles: " << percentRes << "%" << endl;
-            cout << "Finding percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+            cout << "Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentRes * 100 << "%" << endl;
+            cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecute.count()
                  << "ms!" << endl;
         }
 
@@ -136,7 +136,7 @@ int main() {
             else{
                 cout << "Song is not in database!" << endl;
             }
-            cout << "Finding song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+            cout << "Found song title in Unordered Map (Hash Table) in " << timeToExecute.count()
                  << "ms!" << endl;
         }
         else {
