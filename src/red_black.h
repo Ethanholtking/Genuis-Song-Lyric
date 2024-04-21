@@ -109,7 +109,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 			root->left->parent = root;
 		rot = balance(root->left);
 		// Changes the return node if a rotation occured
-		if (rot != "")
+		if (rot != "" || root->parent != prev)
 		{
 			if (rot == "l")
 				return root->left->right;
@@ -119,6 +119,8 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
+			else if (root->parent != prev)
+				return root->parent;
 		}
 	}
 	// Inserts a node to the right
@@ -133,7 +135,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 			root->right->parent = root;
 		rot = balance(root->right);
 		// Changes the return node if a rotation occured
-		if (rot != "")
+		if (rot != "" || root->parent != prev)
 		{
 			if (rot == "l")
 				return root->left->right;
@@ -143,6 +145,8 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent->right->left;
 			else if (rot == "rl")
 				return root->parent->left->right;
+			else if (root->parent != prev)
+				return root->parent;
 		}
 	}
 	return root;
