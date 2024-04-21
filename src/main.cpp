@@ -143,12 +143,21 @@ int main() {
             break;
         }
         // Ask user if they want to search again
-        cout << endl;
-        cout << "Would you like to use again? (Y for yes N for no):";
-        cin >> loopEnd;
-        if(loopEnd == "n" || loopEnd == "N"){
-            start = false;
+        bool quitSelection = false;
+        while (!quitSelection) {
+            cout << endl;
+            cout << "Would you like to use again? (Y for yes, N for no): ";
+            cin >> loopEnd;
+            if (loopEnd == "n" || loopEnd == "N"){
+                start = false;
+                quitSelection = true;
+            } else if (loopEnd == "y" || loopEnd == "Y") {
+                quitSelection = true;
+            } else {
+                cout << "Invalid input." << endl;
+            }
         }
+
     }
     cout << "Thank you for using Genius Title Search!" << endl;
 }
