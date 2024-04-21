@@ -40,6 +40,7 @@ void UnorderedMap::addSong(string title) {
 }
 
 Node* UnorderedMap::searchSong(std::string title) {
+    title = toLower(title);
     int hash = hashFunction(title, capacity);
     if (!array[hash].empty()) { // ensures that title exists in array by searching for hash
         for (auto & node : array[hash]) { // iterates through list (chaining) to find song
