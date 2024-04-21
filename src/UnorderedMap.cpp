@@ -12,6 +12,13 @@ float UnorderedMap::getLoadFactor() {
     return (float)size / (float)capacity;
 }
 
+string UnorderedMap::toLower(string &title)
+{
+    for (int i = 0; i < title.length(); i++)
+        title[i] = tolower(title[i]);
+    return title;
+}
+
 int UnorderedMap::hashFunction(std::string &title, int inputCapacity) { // add ascii of each character, mod total by capacity
     int asciiTotal = 0;
     for (char c : title) {
@@ -21,7 +28,8 @@ int UnorderedMap::hashFunction(std::string &title, int inputCapacity) { // add a
 }
 
 void UnorderedMap::addSong(string title) {
-    Node node = Node(title);
+    string input = toLower(title);
+    Node node = Node(input);
     int hash = hashFunction(title, capacity);
     array[hash].emplace_back(title);
     size++;
