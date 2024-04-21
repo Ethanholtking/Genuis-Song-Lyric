@@ -78,11 +78,16 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
             for (auto &node: array[i]) { // iterates through list (chaining) to find song
                 stringstream songTitle(node.title);
                 string singleWord;
+                vector<string> alreadyContains;
                 while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-                    if (words.find(singleWord) != words.end()) {
-                        words[singleWord]++;
-                    } else {
-                        words.emplace(singleWord, 1);
+                    if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
+                        if (words.find(singleWord) != words.end()) {
+                            words[singleWord]++;
+                            alreadyContains.push_back(singleWord);
+                        } else {
+                            words.emplace(singleWord, 1);
+                            alreadyContains.push_back(singleWord);
+                        }
                     }
                 }
             }
@@ -107,8 +112,16 @@ float UnorderedMap::percentSongsWithWord(string word) {
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
             for (auto &node: array[i]) { // iterates through list (chaining) to find song
-                if (node.title.find(word) != std::string::npos) {
-                    wordCount++;
+                stringstream songTitle(node.title);
+                string singleWord;
+                bool alreadyContains = false;
+                while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+                    if (!alreadyContains) {
+                        if (word == singleWord) {
+                            wordCount++;
+                            alreadyContains = true;
+                        }
+                    }
                 }
             }
         }
