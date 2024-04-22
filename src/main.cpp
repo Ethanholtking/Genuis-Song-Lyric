@@ -70,10 +70,10 @@ int main() {
     for (auto& element : csvData){
         count++;
         if (count <= 290) {
-            tree.insert_node(tree.get_root(), element);
+            tree.insert(element);
         }
     }
-    cout << tree.size << endl;
+
     auto timeEndM = chrono::high_resolution_clock::now();
     auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
@@ -137,7 +137,7 @@ int main() {
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
             cout << "Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResUM * 100 << "%" << endl;
-            cout << "ORDERED MAP TESTING: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResM * 100 << "%" << endl;
+            cout << "ORDERED MAP TESTING: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << (percentResM) * 100 << "%" << endl;
 
             cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
                  << "ms!" << endl;
