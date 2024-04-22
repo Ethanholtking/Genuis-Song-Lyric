@@ -107,7 +107,6 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
     return topFive;
 }
 
-// FIXME Check
 float UnorderedMap::percentSongsWithWord(string word) {
     word = toLower(word);
     int wordCount = 0;
