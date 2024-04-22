@@ -35,6 +35,7 @@ struct red_black_tree
 	bool rl;
 	bool lr;
 	red_black_node* root;
+    int size = 0;
 
 	//Constructor
 	red_black_tree()
@@ -77,7 +78,7 @@ struct red_black_tree
 	red_black_node* get_grandparent(red_black_node* root);
 	string search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	float get_song_titles(red_black_node* root, float percent, string target);
+	float get_song_titles(red_black_node* root, float &percent, string target);
 	map<string, float> update_map(map<string, float> freq, string title);
 	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
 	vector<pair<string, float>> most_used_words(map<string, float> freq);
@@ -185,6 +186,7 @@ void red_black_tree::insert(string data) {
 	}
 	else
 		root = insertHelp(root, data);
+    size++;
 }
 
 red_black_node* red_black_tree::right_rot(red_black_node* node) {
@@ -244,13 +246,22 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-float red_black_tree::get_song_titles(red_black_node* root, float percent, string target)
+float red_black_tree::get_song_titles(red_black_node* root, float &percent, string target)
 {
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-		if (root->title.find(target))
-			percent++;
+        stringstream songTitle(root->title);
+        string singleWord;
+        bool alreadyContains = false;
+        while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+            if (!alreadyContains) {
+                if (target == singleWord) {
+                    percent++;
+                    alreadyContains = true;
+                }
+            }
+        }
 		percent = get_song_titles(root->right, percent, target);
 	}
 	return percent;
