@@ -7,7 +7,6 @@
 #include "UnorderedMap.cpp"
 #include <chrono>
 #include <iomanip>
-#include <map>
 using namespace std;
 
 // Function to read csv
@@ -17,7 +16,7 @@ vector<string> readCSV(const string& filename) {
     vector<string> data;
 
     // reading in file
-    ifstream file("Songs and Artists.csv");
+    ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
         return data;
@@ -51,7 +50,7 @@ int main() {
     cout << endl;
 
     // Read in the CSV data
-    vector<string> csvData = readCSV("Songs and Artists.csv");
+    vector<string> csvData = readCSV("src/Songs and Artists.csv");
 
     // Chrono timer for hashmap
     auto timeStartUM = chrono::high_resolution_clock::now();
@@ -99,22 +98,24 @@ int main() {
             auto timeEndUM = chrono::high_resolution_clock::now();
             auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
 
+            cout << "Unordered Map (Hash Table):" << endl;
             for (int i = 0; i < 5; i++) {
                 cout << i + 1 << ": " << top5UM[i].first << " (" << setprecision(2) << fixed << top5UM[i].second * 100 << "%)"
                     << endl;
             }
             auto timeStartM = chrono::high_resolution_clock::now();
-            std::unordered_map<string, float> freq;
-            freq = tree.freq_of_words(tree.get_root(), freq);
-            vector<pair<string, float>> top5M = tree.most_used_words(freq);
+            vector<pair<string, float>> top5M = tree.mostUsedWords();
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
+
+            cout << "\nOrdered Map (Red Black Tree):" << endl;
             for (int i = 0; i < 5; i++) {
-                cout << i + 1 << ": " << top5M[i].first << " (" << setprecision(2) << fixed << (top5M[i].second / (float)tree.size) * 100 << "%)"
-                    << endl;
+                cout << i + 1 << ": " << top5M[i].first << " (" << setprecision(2) << fixed << top5M[i].second * 100 << "%)"
+                     << endl;
             }
-            cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
-                << "ms!" << endl;
+
+            cout << "\nFound most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
+                 << "ms!" << endl;
             cout << "Found most used words in song titles in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()
                 << "ms!" << endl;
         }
