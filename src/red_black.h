@@ -93,6 +93,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	if (this->root == nullptr)
 	{
 		red_black_node* tree_root = new red_black_node(title);
+        size++;
 		tree_root->red = false;
         this->root = tree_root;
 		return tree_root;
