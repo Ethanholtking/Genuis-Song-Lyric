@@ -1,6 +1,6 @@
 <H1> Genuis Song Title Parser </h1>
 <i>COP3530 Project 3 - Tiffany Vo, Ethan King, Evan Stice</i>
-<br>Video link
+<br> [Video Link](https://drive.google.com/file/d/18mjiZZzcIax9Da7hPcUjKE7-PjZzoTIJ/view?usp=sharing)
 
 <h2> Usage </h2>
 
