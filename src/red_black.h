@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <queue>
 #import <algorithm>
 #include <stack>
@@ -38,7 +38,7 @@ struct red_black_tree
 	bool rl;
 	bool lr;
 	red_black_node* root;
-	int size = 0;
+    int size = 0;
 
 	//Constructor
 	red_black_tree()
@@ -73,7 +73,7 @@ struct red_black_tree
 		delete curr;
 	}
 	string to_lower(string title);
-	red_black_node* insertHelp(red_black_node* root, string& data);
+	red_black_node* insertHelp(red_black_node* root, string data);
 	void insert(string data);
 	red_black_node* right_rot(red_black_node* root);
 	red_black_node* left_rot(red_black_node* root);
@@ -95,7 +95,7 @@ string red_black_tree::to_lower(string title)
 		title[i] = tolower(title[i]);
 	return title;
 }
-red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
+red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
 	bool f = false; // Flag to check RED-RED conflict
 
 	if (root == nullptr)
@@ -184,14 +184,14 @@ red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
 }
 
 void red_black_tree::insert(string data) {
-	data = to_lower(data);
+    data = to_lower(data);
 	if (root == nullptr) {
 		root = new red_black_node(data);
 		root->red = false;
 	}
 	else
 		root = insertHelp(root, data);
-	size++;
+    size++;
 }
 
 red_black_node* red_black_tree::right_rot(red_black_node* node) {
@@ -216,19 +216,31 @@ red_black_node* red_black_tree::left_rot(red_black_node* node) {
 	return x;
 }
 
-string red_black_tree::search(red_black_node* root, string& target, string title)
+red_black_node* red_black_tree::get_grandparent(red_black_node* root)
 {
-	if (root != nullptr)
-	{
-		if (root->title == target)
-			title = target;
-		title = search(root->left, target, title);
-		title = search(root->right, target, title);
-	}
-	return title;
+	// root is the root of the tree
+	if (root->parent == nullptr)
+		return nullptr;
+	// root is child of the tree's root
+	else if (root->parent->parent == nullptr)
+		return nullptr;
+	return root->parent->parent;
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string>& titles)
+string red_black_tree::search(red_black_node* root, string target)
+{
+	if (root == nullptr)
+		return "";
+	if (root->title == target)
+		return target;
+	else if (root->title < target)
+		return search(root->left, target);
+	else if (root->title > target)
+		return search(root->right, target);
+    return "";
+}
+
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
 {
 	if (root != nullptr)
 	{
@@ -239,22 +251,22 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-float red_black_tree::get_song_titles(red_black_node* root, float& percent, string& target)
+float red_black_tree::get_song_titles(red_black_node* root, float &percent, string target)
 {
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-		stringstream songTitle(root->title);
-		string singleWord;
-		bool alreadyContains = false;
-		while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-			if (!alreadyContains) {
-				if (target == singleWord) {
-					percent++;
-					alreadyContains = true;
-				}
-			}
-		}
+        stringstream songTitle(root->title);
+        string singleWord;
+        bool alreadyContains = false;
+        while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+            if (!alreadyContains) {
+                if (target == singleWord) {
+                    percent++;
+                    alreadyContains = true;
+                }
+            }
+        }
 		percent = get_song_titles(root->right, percent, target);
 	}
 	return percent;
@@ -262,40 +274,29 @@ float red_black_tree::get_song_titles(red_black_node* root, float& percent, stri
 
 map<string, float> red_black_tree::update_map(map<string, float> &freq, string title)
 {
-	stringstream songTitle(title);
-	string singleWord;
-	vector<string> alreadyContains;
-	while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-		if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
-			if (freq.find(singleWord) != freq.end()) {
-				freq[singleWord]++;
-				alreadyContains.push_back(singleWord);
-			}
-			else {
-				freq.emplace(singleWord, 1);
-				alreadyContains.push_back(singleWord);
-			}
-		}
-	}
+    stringstream songTitle(title);
+    string singleWord;
+    vector<string> alreadyContains;
+    while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+        if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
+            if (freq.find(singleWord) != freq.end()) {
+                freq[singleWord]++;
+                alreadyContains.push_back(singleWord);
+            } else {
+                freq.emplace(singleWord, 1);
+                alreadyContains.push_back(singleWord);
+            }
+        }
+    }
 	return freq;
 }
-*/
 
 map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<string, float> &freq)
 {
 	if (root != nullptr)
 	{
 		freq = freq_of_words(root->left, freq);
-		stringstream songTitle(root->title);
-		string singleWord;
-		while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-			if (freq.find(singleWord) != freq.end()) {
-				freq[singleWord]++;
-			}
-			else {
-				freq.emplace(singleWord, 1);
-			}
-		}
+		freq = update_map(freq, root->title);
 		freq = freq_of_words(root->right, freq);
 	}
 	return freq;

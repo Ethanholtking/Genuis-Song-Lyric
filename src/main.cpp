@@ -24,7 +24,7 @@ vector<string> readCSV(const string& filename) {
 
     // Read each line of the file
     string line;
-    while (getline(file, line)) {
+    while(getline(file, line)){
         //vector<string> row;
         stringstream ss(line);
         string cell;
@@ -56,7 +56,7 @@ int main() {
     auto timeStartUM = chrono::high_resolution_clock::now();
     // insert data to hash map
     UnorderedMap map(16);
-    for (const auto& element : csvData) {
+    for(const auto& element : csvData){
         map.addSong(element);
     }
     auto timeEndUM = chrono::high_resolution_clock::now();
@@ -65,8 +65,7 @@ int main() {
     // Insert to tree
     auto timeStartM = chrono::high_resolution_clock::now();
     red_black_tree tree;
-    for (auto& element : csvData)
-    {
+    for (auto& element : csvData){
         tree.insert(element);
     }
 
@@ -80,11 +79,11 @@ int main() {
 
     // Start Menu
     std::cout << "Welcome to the Genius Song Title Search!\n";
-    while (start) {
+    while(start){
         cout << std::endl;
         std::cout << "Which function would you like to use?" << endl;
         cout << "1. Most used words in song titles\n2. % of total songs that include specific word\n"
-            "3. Search for a song\n4. Quit\n";
+                "3. Search for a song\n4. Quit\n";
         cout << "(Type 1, 2, 3, or 4):";
         cin >> methodPick;
         cout << endl;
@@ -101,7 +100,7 @@ int main() {
             cout << "Unordered Map (Hash Table):" << endl;
             for (int i = 0; i < 5; i++) {
                 cout << i + 1 << ": " << top5UM[i].first << " (" << setprecision(2) << fixed << top5UM[i].second * 100 << "%)"
-                    << endl;
+                     << endl;
             }
             auto timeStartM = chrono::high_resolution_clock::now();
             vector<pair<string, float>> top5M = tree.mostUsedWords();
@@ -117,7 +116,7 @@ int main() {
             cout << "\nFound most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
                  << "ms!" << endl;
             cout << "Found most used words in song titles in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()
-                << "ms!" << endl;
+                 << "ms!" << endl;
         }
         // % word used
         else if (methodPick == "2") {
@@ -141,43 +140,36 @@ int main() {
             cout << "ORDERED MAP: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << ((percentResM) / (float)tree.size) * 100 << "%\n" << endl;
 
             cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
-                << "ms!" << endl;
+                 << "ms!" << endl;
             cout << "Found percentage of single word in a song title in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()
-                << "ms!" << endl;
+                 << "ms!" << endl;
         }
 
         else if (methodPick == "3") {
             string findTitle;
             std::cout << "Please enter the song to search:";
             getline(cin >> std::ws, findTitle); // string to be searched in song list
-            auto timeStart = chrono::high_resolution_clock::now();
+            auto timeStartUM = chrono::high_resolution_clock::now();
             Node* songFound = map.searchSong(findTitle);
-            auto timeEnd = chrono::high_resolution_clock::now();
-            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+            auto timeEndUM = chrono::high_resolution_clock::now();
+            auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
+
+            auto timeStartM = chrono::high_resolution_clock::now();
+            // Search function for ordered map
+            auto timeEndM = chrono::high_resolution_clock::now();
+            auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
             if (songFound != nullptr) {
-                cout << songFound->title << " was found in the database!" << endl;
+                cout << songFound->title  << " was found in the database!" << endl;
             }
-            else {
-                cout << "Song is not in database!" << endl;
+            else{
+                cout << "Song is not in database!\n" << endl;
             }
-            cout << "Search function in Unordered Map (Hash Table) performed in " << timeToExecute.count()
-                << "ms!" << endl;
 
-            auto newTimeStart = chrono::high_resolution_clock::now();
-            string search_title = findTitle;
-            search_title = tree.to_lower(search_title);
-            string mSongFound = tree.search(tree.get_root(), search_title, "");
-            auto newTimeEnd = chrono::high_resolution_clock::now();
-            auto newTimeToExecute = chrono::duration_cast<chrono::milliseconds>(newTimeEnd - newTimeStart);
-            if (mSongFound != "") {
-                cout << findTitle << " was found in the database!" << endl;
-            }
-            else {
-                cout << "Song is not in database!" << endl;
-            }
-            cout << "Search function in ordered Map (Red Black Tree) performed in " << newTimeToExecute.count()
-                << "ms!" << endl;
+            cout << "Search function in Unordered Map (Hash Table) performed in " << timeToExecuteUM.count()
+                 << "ms!" << endl;
+            cout << "Search function in Ordered Map (Red Black Tree) performed in " << timeToExecuteM.count()
+                 << "ms!" << endl;
         }
         else {
             start = false;
@@ -189,14 +181,12 @@ int main() {
             cout << endl;
             cout << "Would you like to use again? (Y for yes, N for no): ";
             cin >> loopEnd;
-            if (loopEnd == "n" || loopEnd == "N") {
+            if (loopEnd == "n" || loopEnd == "N"){
                 start = false;
                 quitSelection = true;
-            }
-            else if (loopEnd == "y" || loopEnd == "Y") {
+            } else if (loopEnd == "y" || loopEnd == "Y") {
                 quitSelection = true;
-            }
-            else {
+            } else {
                 cout << "Invalid input." << endl;
             }
         }
