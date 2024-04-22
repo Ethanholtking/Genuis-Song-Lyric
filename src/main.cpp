@@ -41,6 +41,8 @@ vector<string> readCSV(const string& filename) {
     file.close();
     return data;
 }
+
+
 int main() {
     bool start = true;
     string input;
@@ -64,10 +66,14 @@ int main() {
     // Insert to tree
     auto timeStartM = chrono::high_resolution_clock::now();
     red_black_tree tree;
-    for(const auto& element : csvData){
-        tree.insert_node(tree.get_root(), element);
+    int count = 0;
+    for (auto& element : csvData){
+        count++;
+        if (count <= 290) {
+            tree.insert_node(tree.get_root(), element);
+        }
     }
-
+    cout << tree.size << endl;
     auto timeEndM = chrono::high_resolution_clock::now();
     auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
@@ -176,7 +182,6 @@ int main() {
                 cout << "Invalid input." << endl;
             }
         }
-
     }
     cout << "Thank you for using Genius Title Search!" << endl;
 }
