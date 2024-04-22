@@ -5,7 +5,9 @@
 #include <queue>
 using namespace std;
 
-class red_black_node
+
+struct red_black_node
+
 {
 public:
 	// Variables for the node
@@ -26,26 +28,22 @@ public:
 	}
 };
 
-class red_black_tree
+struct red_black_tree
 {
-private:
-	red_black_node* root;
-    int size;
 	bool ll;
 	bool rr;
-	bool lr;
 	bool rl;
+	bool lr;
+	red_black_node* root;
 
-public:
 	//Constructor
 	red_black_tree()
 	{
 		this->root = nullptr;
-        this->size = 0;
-		ll = false;
-		rr = false;
-		lr = false;
-		rl = false;
+		bool ll = false;
+		bool rr = false;
+		bool rl = false;
+		bool lr = false;
 	}
 	// Getter
 	red_black_node* get_root()
@@ -78,13 +76,19 @@ public:
 	red_black_node* get_uncle(red_black_node* root);
 	red_black_node* get_grandparent(red_black_node* root);
 	string search(red_black_node* root, string target);
-	vector<string> in_order_traversal(red_black_node* root, vector<string> &titles);
+	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
 	map<string, float> update_map(map<string, float> freq, string title);
 	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
 	vector<pair<string, float>> most_used_words(map<string, float> freq);
 };
 
+string red_black_tree::to_lower(string title)
+{
+	for (int i = 0; i < title.length(); i++)
+		title[i] = tolower(title[i]);
+	return title;
+}
 red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
 	bool f = false; // Flag to check RED-RED conflict
 
@@ -204,15 +208,11 @@ red_black_node* red_black_tree::left_rot(red_black_node* node) {
 	return x;
 }
 
-
-
 string red_black_tree::to_lower(string title)
 {
 	for (int i = 0; i < title.length(); i++)
 		title[i] = tolower(title[i]);
 	return title;
-}
-
 red_black_node* red_black_tree::get_uncle(red_black_node* root)
 {
 	red_black_node* grandparent = get_grandparent(root);
@@ -252,7 +252,7 @@ string red_black_tree::search(red_black_node* root, string target)
 		return search(root->right, target);
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> &titles)
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
 {
 	if (root != nullptr)
 	{
@@ -268,20 +268,11 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-        stringstream songTitle(root->title);
-        string singleWord;
-        bool alreadyContains = false;
-        while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-            if (!alreadyContains) {
-                if (target == singleWord) {
-                    percent++;
-                    alreadyContains = true;
-                }
-            }
-        }
+		if (root->title.find(target))
+			percent++;
 		percent = get_song_titles(root->right, percent, target);
 	}
-	return (float)percent / (float)size;
+	return percent;
 }
 
 map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
