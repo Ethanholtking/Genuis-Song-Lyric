@@ -129,10 +129,10 @@ int main() {
             percentResUM = map.percentSongsWithWord(word);
             auto timeEndUM = chrono::high_resolution_clock::now();
             auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
-
+            string mWord = tree.to_lower(word);
             auto timeStartM = chrono::high_resolution_clock::now();
             float percentResM = 0;
-            percentResM = tree.get_song_titles(tree.get_root(), percentResM, word);
+            percentResM = tree.get_song_titles(tree.get_root(), percentResM, mWord);
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
