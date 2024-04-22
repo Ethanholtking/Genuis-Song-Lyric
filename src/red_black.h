@@ -4,6 +4,8 @@
 #include <map>
 #include <queue>
 #import <algorithm>
+#include <stack>
+#include <unordered_map>
 using namespace std;
 
 
@@ -80,9 +82,11 @@ struct red_black_tree
 	string search(red_black_node* root, string target);
 	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
 	float get_song_titles(red_black_node* root, float &percent, string target);
-	map<string, float> update_map(map<string, float> freq, string title);
-	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
-	vector<pair<string, float>> most_used_words(map<string, float> freq);
+	map<string, float> update_map(map<string, float> &freq, string title);
+	map<string, float> freq_of_words(red_black_node* root, map<string, float> &freq);
+	vector<pair<string, float>> most_used_words(map<string, float> &freq);
+    vector<pair<string, float>> mostUsedWords();
+    vector<red_black_node*> getAllNodes();
 };
 
 string red_black_tree::to_lower(string title)
@@ -268,7 +272,7 @@ float red_black_tree::get_song_titles(red_black_node* root, float &percent, stri
 	return percent;
 }
 
-map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
+map<string, float> red_black_tree::update_map(map<string, float> &freq, string title)
 {
     stringstream songTitle(title);
     string singleWord;
@@ -287,7 +291,7 @@ map<string, float> red_black_tree::update_map(map<string, float> freq, string ti
 	return freq;
 }
 
-map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<string, float> freq)
+map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<string, float> &freq)
 {
 	if (root != nullptr)
 	{
@@ -298,7 +302,7 @@ map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<strin
 	return freq;
 }
 
-vector<pair<string, float>> red_black_tree::most_used_words(map<string, float> freq)
+vector<pair<string, float>> red_black_tree::most_used_words(map<string, float> &freq)
 {
 	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq;
 	auto it = freq.begin();
@@ -327,4 +331,59 @@ vector<pair<string, float>> red_black_tree::most_used_words(map<string, float> f
 		most_used[i] = most_used_r[most_used_r.size() - (i + 1)];
 	}
 	return most_used;
+}
+
+vector<pair<string, float>> red_black_tree::mostUsedWords() {
+    vector<red_black_node*> nodes = getAllNodes();
+    unordered_map<string, int> words;
+    for (auto &node: nodes) { // iterates through list (chaining) to find song
+        stringstream songTitle(node->title);
+        string singleWord;
+        vector<string> alreadyContains;
+        while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+            if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
+                if (words.find(singleWord) != words.end()) {
+                    words[singleWord]++;
+                    alreadyContains.push_back(singleWord);
+                } else {
+                    words.emplace(singleWord, 1);
+                    alreadyContains.push_back(singleWord);
+                }
+            }
+        }
+    }
+    priority_queue<pair<int, string>> pQueue;
+    for (auto &word : words) {
+        pQueue.emplace(word.second, word.first);
+    }
+    vector<pair<string, float>> topFive;
+    for (int i = 0; i < 5; i++) {
+        pair<int, string> greatestWord = pQueue.top();
+        pQueue.pop();
+        topFive.emplace_back(greatestWord.second, ((float)greatestWord.first / (float)size));
+    }
+    return topFive;
+}
+
+vector<red_black_node*> red_black_tree::getAllNodes() {
+    vector<red_black_node*> data;
+    stack<red_black_node*> nodes;
+    red_black_node* current = this->root;
+
+    while (current != nullptr || !nodes.empty()) {
+        while (current != nullptr) {
+            nodes.push(current);
+            current = current->left;
+        }
+
+        // Current must be NULL at this point
+        current = nodes.top();
+        nodes.pop();
+
+        data.push_back(current);
+
+        current = current->right;
+
+    }
+    return data;
 }
