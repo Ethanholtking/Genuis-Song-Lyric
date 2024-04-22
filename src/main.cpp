@@ -17,7 +17,7 @@ vector<string> readCSV(const string& filename) {
     vector<string> data;
 
     // reading in file
-    ifstream file("src/Songs and Artists.csv");
+    ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
         return data;
