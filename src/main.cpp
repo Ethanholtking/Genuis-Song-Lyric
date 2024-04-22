@@ -67,6 +67,7 @@ int main() {
     for(const auto& element : csvData){
         tree.insert_node(tree.get_root(), element);
     }
+
     auto timeEndM = chrono::high_resolution_clock::now();
     auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
@@ -100,11 +101,11 @@ int main() {
                      << endl;
             }
             auto timeStartM = chrono::high_resolution_clock::now();
-            std::map<string, float> freq = tree.freq_of_words(tree.get_root(), freq);
+            std::map<string, float> freq;
+            freq = tree.freq_of_words(tree.get_root(), freq);
             vector<pair<string, float>> top5M = tree.most_used_words(freq);
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
-
 
             cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
                  << "ms!" << endl;
@@ -114,17 +115,27 @@ int main() {
         // % word used
         else if (methodPick == "2") {
             string word;
-            float percentRes;
+            float percentResUM;
+            float percentResM;
             cout << "Please enter a word you would like to search:";
             cin >> word;
             cout << endl;
-            auto timeStart = chrono::high_resolution_clock::now();
-            percentRes = map.percentSongsWithWord(word);
-            auto timeEnd = chrono::high_resolution_clock::now();
-            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+            auto timeStartUM = chrono::high_resolution_clock::now();
+            percentResUM = map.percentSongsWithWord(word);
+            auto timeEndUM = chrono::high_resolution_clock::now();
+            auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
 
-            cout << "Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentRes * 100 << "%" << endl;
-            cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecute.count()
+            auto timeStartM = chrono::high_resolution_clock::now();
+            percentResM = tree.get_song_titles(tree.get_root(), percentResM, word);
+            auto timeEndM = chrono::high_resolution_clock::now();
+            auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
+
+            cout << "Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResUM * 100 << "%" << endl;
+            cout << "ORDERED MAP TESTING: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResM * 100 << "%" << endl;
+
+            cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
+                 << "ms!" << endl;
+            cout << "Found percentage of single word in a song title in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()
                  << "ms!" << endl;
         }
 
