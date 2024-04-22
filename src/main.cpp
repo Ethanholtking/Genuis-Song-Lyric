@@ -17,7 +17,7 @@ vector<string> readCSV(const string& filename) {
     vector<string> data;
 
     // reading in file
-    ifstream file("Songs and Artists.csv");
+    ifstream file("src/Songs and Artists.csv");
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
         return data;
@@ -66,12 +66,8 @@ int main() {
     // Insert to tree
     auto timeStartM = chrono::high_resolution_clock::now();
     red_black_tree tree;
-    int count = 0;
     for (auto& element : csvData){
-        count++;
-        if (count <= 290) {
-            tree.insert(element);
-        }
+        tree.insert(element);
     }
 
     auto timeEndM = chrono::high_resolution_clock::now();
@@ -122,7 +118,6 @@ int main() {
         else if (methodPick == "2") {
             string word;
             float percentResUM;
-            float percentResM;
             cout << "Please enter a word you would like to search:";
             cin >> word;
             cout << endl;
@@ -132,12 +127,13 @@ int main() {
             auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
 
             auto timeStartM = chrono::high_resolution_clock::now();
+            float percentResM = 0;
             percentResM = tree.get_song_titles(tree.get_root(), percentResM, word);
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
-            cout << "Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResUM * 100 << "%" << endl;
-            cout << "ORDERED MAP TESTING: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << (percentResM) * 100 << "%" << endl;
+            cout << "UNORDERED MAP: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << percentResUM * 100 << "%" << endl;
+            cout << "ORDERED MAP: Percentage the word \"" << word << "\" was used in song titles: " << setprecision(2) << fixed << ((percentResM) / (float)tree.size) * 100 << "%\n" << endl;
 
             cout << "Found percentage of single word in a song title in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
                  << "ms!" << endl;
