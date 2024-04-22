@@ -84,7 +84,6 @@ string red_black_tree::to_lower(string title)
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
-    size++;
 	string rot;
 	red_black_node* prev;
 	red_black_node* prev_left;
@@ -153,6 +152,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent;
 		}
 	}
+    size++;
 	return root;
 }
 
