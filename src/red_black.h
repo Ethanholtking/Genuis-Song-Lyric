@@ -178,6 +178,7 @@ red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
 }
 
 void red_black_tree::insert(string data) {
+    data = to_lower(data);
 	if (root == nullptr) {
 		root = new red_black_node(data);
 		root->red = false;
@@ -208,27 +209,6 @@ red_black_node* red_black_tree::left_rot(red_black_node* node) {
 	return x;
 }
 
-string red_black_tree::to_lower(string title)
-{
-	for (int i = 0; i < title.length(); i++)
-		title[i] = tolower(title[i]);
-	return title;
-red_black_node* red_black_tree::get_uncle(red_black_node* root)
-{
-	red_black_node* grandparent = get_grandparent(root);
-	// root is the root of the tree or is child of the tree's root
-	if (root->parent == nullptr || grandparent == nullptr)
-		return nullptr;
-	else
-	{
-		// If the grandparents left child is the root's parent
-		if (grandparent->left == root->parent)
-			return grandparent->right;
-		else
-			return grandparent->left;
-	}
-}
-
 red_black_node* red_black_tree::get_grandparent(red_black_node* root)
 {
 	// root is the root of the tree
@@ -250,6 +230,7 @@ string red_black_tree::search(red_black_node* root, string target)
 		return search(root->left, target);
 	else if (root->title > target)
 		return search(root->right, target);
+    return "";
 }
 
 vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
