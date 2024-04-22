@@ -5,7 +5,9 @@
 #include <queue>
 using namespace std;
 
+
 struct red_black_node
+
 {
 public:
 	// Variables for the node
@@ -87,7 +89,6 @@ string red_black_tree::to_lower(string title)
 		title[i] = tolower(title[i]);
 	return title;
 }
-
 red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
 	bool f = false; // Flag to check RED-RED conflict
 
@@ -207,6 +208,11 @@ red_black_node* red_black_tree::left_rot(red_black_node* node) {
 	return x;
 }
 
+string red_black_tree::to_lower(string title)
+{
+	for (int i = 0; i < title.length(); i++)
+		title[i] = tolower(title[i]);
+	return title;
 red_black_node* red_black_tree::get_uncle(red_black_node* root)
 {
 	red_black_node* grandparent = get_grandparent(root);
