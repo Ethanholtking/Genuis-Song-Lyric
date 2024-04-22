@@ -66,7 +66,8 @@ int main() {
     // Insert to tree
     auto timeStartM = chrono::high_resolution_clock::now();
     red_black_tree tree;
-    for (auto& element : csvData) {
+    for (auto& element : csvData)
+    {
         tree.insert(element);
     }
 
@@ -108,7 +109,10 @@ int main() {
             vector<pair<string, float>> top5M = tree.most_used_words(freq);
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
-
+            for (int i = 0; i < 5; i++) {
+                cout << i + 1 << ": " << top5M[i].first << " (" << setprecision(2) << fixed << (top5M[i].second / (float)tree.size) * 100 << "%)"
+                    << endl;
+            }
             cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
                 << "ms!" << endl;
             cout << "Found most used words in song titles in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()

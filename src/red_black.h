@@ -292,7 +292,21 @@ map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<strin
 	if (root != nullptr)
 	{
 		freq = freq_of_words(root->left, freq);
-		freq = update_map(freq, root->title);
+		stringstream songTitle(root->title);
+		string singleWord;
+		vector<string> alreadyContains;
+		while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+			if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
+				if (freq.find(singleWord) != freq.end()) {
+					freq[singleWord]++;
+					alreadyContains.push_back(singleWord);
+				}
+				else {
+					freq.emplace(singleWord, 1);
+					alreadyContains.push_back(singleWord);
+				}
+			}
+		}
 		freq = freq_of_words(root->right, freq);
 	}
 	return freq;
