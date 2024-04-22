@@ -3,10 +3,6 @@
 #include <string>
 #include <map>
 #include <queue>
-#include <chrono>
-#include <iomanip>
-#include<sstream>
-#include <fstream>
 using namespace std;
 
 struct red_black_node
@@ -37,6 +33,7 @@ struct red_black_tree
 	bool rl;
 	bool lr;
 	red_black_node* root;
+	int size;
 
 	//Constructor
 	red_black_tree()
@@ -46,6 +43,7 @@ struct red_black_tree
 		bool rr = false;
 		bool rl = false;
 		bool lr = false;
+		this->size = 0;
 	}
 	// Getter
 	red_black_node* get_root()
