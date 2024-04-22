@@ -7,6 +7,7 @@
 #include "UnorderedMap.cpp"
 #include <chrono>
 #include <iomanip>
+#include <map>
 using namespace std;
 
 // Function to read csv
@@ -51,29 +52,27 @@ int main() {
     vector<string> csvData = readCSV("Songs and Artists.csv");
 
     // Chrono timer for hashmap
-    auto timeStart = chrono::high_resolution_clock::now();
+    auto timeStartUM = chrono::high_resolution_clock::now();
     // insert data to hash map
     UnorderedMap map(16);
     for(const auto& element : csvData){
         map.addSong(element);
     }
-    auto timeEnd = chrono::high_resolution_clock::now();
-    auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+    auto timeEndUM = chrono::high_resolution_clock::now();
+    auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
 
-    /*
     // Insert to tree
-    auto newTimeStart = chrono::high_resolution_clock::now();
-    red_black_tree tree = red_black_tree();
+    auto timeStartM = chrono::high_resolution_clock::now();
+    red_black_tree tree;
     for(const auto& element : csvData){
-        tree.set_root(tree.insert_node(tree.get_root(), element));
+        tree.insert_node(tree.get_root(), element);
     }
-    auto newTimeEnd = chrono::high_resolution_clock::now();
-    auto newTimeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
-    */
+    auto timeEndM = chrono::high_resolution_clock::now();
+    auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
     // Show results
-    cout << "Loaded Unordered Map (Hash Table) in " << timeToExecute.count() << "ms!" << endl;
-    //cout << "Loaded Ordered Map (Red Black Tree) in " << newTimeToExecute.count() << "ms!" << endl;
+    cout << "Loaded Unordered Map (Hash Table) in " << timeToExecuteUM.count() << "ms!" << endl;
+    cout << "Loaded Ordered Map (Red Black Tree) in " << timeToExecuteM.count() << "ms!" << endl;
     cout << endl;
 
     // Start Menu
@@ -91,16 +90,25 @@ int main() {
         if (methodPick == "1") {
             cout << "Showing most used words in song titles:" << endl;
             // Chrono timer
-            auto timeStart = chrono::high_resolution_clock::now();
-            vector<pair<string, float>> top5 = map.mostUsedWords();
-            auto timeEnd = chrono::high_resolution_clock::now();
-            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+            auto timeStartUM = chrono::high_resolution_clock::now();
+            vector<pair<string, float>> top5UM = map.mostUsedWords();
+            auto timeEndUM = chrono::high_resolution_clock::now();
+            auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
 
             for (int i = 0; i < 5; i++) {
-                cout << i + 1 << ": " << top5[i].first << " (" << setprecision(2) << fixed << top5[i].second * 100 << "%)"
+                cout << i + 1 << ": " << top5UM[i].first << " (" << setprecision(2) << fixed << top5UM[i].second * 100 << "%)"
                      << endl;
             }
-            cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecute.count()
+            auto timeStartM = chrono::high_resolution_clock::now();
+            std::map<string, float> freq = tree.freq_of_words(tree.get_root(), freq);
+            vector<pair<string, float>> top5M = tree.most_used_words(freq);
+            auto timeEndM = chrono::high_resolution_clock::now();
+            auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
+
+
+            cout << "Found most used words in song titles in Unordered Map (Hash Table) in " << timeToExecuteUM.count()
+                 << "ms!" << endl;
+            cout << "Found most used words in song titles in Ordered Map (Red Black Tree) in " << timeToExecuteM.count()
                  << "ms!" << endl;
         }
         // % word used
