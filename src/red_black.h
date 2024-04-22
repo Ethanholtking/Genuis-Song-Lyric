@@ -98,8 +98,10 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 		return tree_root;
 	}
 	// inserts a node
-	if (root == nullptr)
-		return new red_black_node(title);
+	if (root == nullptr) {
+        size++;
+        return new red_black_node(title);
+    }
 	// Inserts a node to the left
 	else if (title < root->title)
 	{
@@ -152,7 +154,6 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 				return root->parent;
 		}
 	}
-    size++;
 	return root;
 }
 
