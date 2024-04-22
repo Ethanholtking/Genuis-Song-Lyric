@@ -29,11 +29,13 @@ public:
 struct red_black_tree
 {
 	red_black_node* root;
+    int size;
 
 	//Constructor
 	red_black_tree()
 	{
 		this->root = nullptr;
+        this->size = 0;
 	}
 	// Getter
 	red_black_node* get_root()
@@ -66,7 +68,7 @@ struct red_black_tree
 	red_black_node* get_grandparent(red_black_node* root);
 	string balance(red_black_node* root);
 	string search(red_black_node* root, string target);
-	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
+	vector<string> in_order_traversal(red_black_node* root, vector<string> &titles);
 	float get_song_titles(red_black_node* root, float percent, string target);
 	map<string, float> update_map(map<string, float> freq, string title);
 	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
@@ -82,6 +84,7 @@ string red_black_tree::to_lower(string title)
 
 red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 {
+    size++;
 	string rot;
 	red_black_node* prev;
 	red_black_node* prev_left;
@@ -92,6 +95,7 @@ red_black_node* red_black_tree::insert_node(red_black_node* root, string title)
 	{
 		red_black_node* tree_root = new red_black_node(title);
 		tree_root->red = false;
+        this->root = tree_root;
 		return tree_root;
 	}
 	// inserts a node
@@ -311,7 +315,7 @@ string red_black_tree::search(red_black_node* root, string target)
 		return search(root->right, target);
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> &titles)
 {
 	if (root != nullptr)
 	{
@@ -331,7 +335,7 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 			percent++;
 		percent = get_song_titles(root->right, percent, target);
 	}
-	return percent;
+	return (float)percent / (float)size;
 }
 
 map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
