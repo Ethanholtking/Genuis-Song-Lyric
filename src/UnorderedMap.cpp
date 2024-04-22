@@ -12,14 +12,14 @@ float UnorderedMap::getLoadFactor() {
     return (float)size / (float)capacity;
 }
 
-string UnorderedMap::toLower(string &title)
+string UnorderedMap::toLower(string& title)
 {
     for (int i = 0; i < title.length(); i++)
         title[i] = tolower(title[i]);
     return title;
 }
 
-int UnorderedMap::hashFunction(std::string &title, int inputCapacity) { // add ascii of each character, mod total by capacity
+int UnorderedMap::hashFunction(std::string& title, int inputCapacity) { // add ascii of each character, mod total by capacity
     int asciiTotal = 0;
     for (char c : title) {
         asciiTotal += (int)c;
@@ -43,7 +43,7 @@ Node* UnorderedMap::searchSong(std::string title) {
     title = toLower(title);
     int hash = hashFunction(title, capacity);
     if (!array[hash].empty()) { // ensures that title exists in array by searching for hash
-        for (auto & node : array[hash]) { // iterates through list (chaining) to find song
+        for (auto& node : array[hash]) { // iterates through list (chaining) to find song
             if (node.title == title) {
                 return &node;
             }
@@ -53,11 +53,11 @@ Node* UnorderedMap::searchSong(std::string title) {
 }
 
 void UnorderedMap::rebuild() { // rehashes all entries with new mapsize
-    auto *newArray = new list<Node>[capacity * 2];
-    list<Node> *currArray = array;
+    auto* newArray = new list<Node>[capacity * 2];
+    list<Node>* currArray = array;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
-            for (auto &node: array[i]) { // iterates through list (chaining) to find song
+            for (auto& node : array[i]) { // iterates through list (chaining) to find song
                 int hash = hashFunction(node.title, capacity * 2);
                 newArray[hash].emplace_back(node.title);
             }
@@ -76,7 +76,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
     unordered_map<string, int> words;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
-            for (auto &node: array[i]) { // iterates through list (chaining) to find song
+            for (auto& node : array[i]) { // iterates through list (chaining) to find song
                 stringstream songTitle(node.title);
                 string singleWord;
                 vector<string> alreadyContains;
@@ -85,7 +85,8 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
                         if (words.find(singleWord) != words.end()) {
                             words[singleWord]++;
                             alreadyContains.push_back(singleWord);
-                        } else {
+                        }
+                        else {
                             words.emplace(singleWord, 1);
                             alreadyContains.push_back(singleWord);
                         }
@@ -95,7 +96,7 @@ vector<pair<string, float>> UnorderedMap::mostUsedWords() {
         }
     }
     priority_queue<pair<int, string>> pQueue;
-    for (auto &word : words) {
+    for (auto& word : words) {
         pQueue.emplace(word.second, word.first);
     }
     vector<pair<string, float>> topFive;
@@ -112,7 +113,7 @@ float UnorderedMap::percentSongsWithWord(string word) {
     int wordCount = 0;
     for (int i = 0; i < capacity; i++) {
         if (!array[i].empty()) { // ensures that title exists in array by searching for hash
-            for (auto &node: array[i]) { // iterates through list (chaining) to find song
+            for (auto& node : array[i]) { // iterates through list (chaining) to find song
                 stringstream songTitle(node.title);
                 string singleWord;
                 bool alreadyContains = false;

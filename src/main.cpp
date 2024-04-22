@@ -1,4 +1,4 @@
-#import <iostream>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -16,7 +16,7 @@ vector<string> readCSV(const string& filename) {
     vector<string> data;
 
     // reading in file
-    ifstream file(filename);
+    ifstream file("Songs and Artists.csv");
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
         return data;
@@ -159,7 +159,7 @@ int main() {
             string mSongFound = tree.search(tree.get_root(), findTitle, "");
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
-           if (songFound != nullptr) {
+            if (songFound != nullptr) {
                 cout << songFound->title << " was found in the database!" << endl;
             }
             else {
