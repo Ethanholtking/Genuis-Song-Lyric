@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <queue>
+#import <algorithm>
 using namespace std;
 
 
@@ -269,29 +270,20 @@ float red_black_tree::get_song_titles(red_black_node* root, float &percent, stri
 
 map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
 {
-	string curr = "";
-	for (int i = 0; i < title.length(); i++)
-	{
-		if (title[i] != (char)' ')
-			curr += title[i];
-		else
-		{
-			if (freq.find(curr) != freq.end())
-			{
-				freq[curr] += 1;
-				curr = "";
-			}
-			else
-			{
-				freq.emplace(curr, 1);
-				curr = "";
-			}
-		}
-	}
-	if (freq.find(curr) != freq.end())
-		freq[curr] += 1;
-	else
-		freq.emplace(curr, 1);
+    stringstream songTitle(title);
+    string singleWord;
+    vector<string> alreadyContains;
+    while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+        if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
+            if (freq.find(singleWord) != freq.end()) {
+                freq[singleWord]++;
+                alreadyContains.push_back(singleWord);
+            } else {
+                freq.emplace(singleWord, 1);
+                alreadyContains.push_back(singleWord);
+            }
+        }
+    }
 	return freq;
 }
 
