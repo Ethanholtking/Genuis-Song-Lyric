@@ -156,11 +156,18 @@ int main() {
 
 
             auto timeStartM = chrono::high_resolution_clock::now();
-            string mSongFound = tree.search(tree.get_root(), findTitle, "");
+            string mFindTitle = tree.to_lower(findTitle);
+            string mSongFound = tree.search(tree.get_root(), mFindTitle, "");
             auto timeEndM = chrono::high_resolution_clock::now();
             auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
             if (songFound != nullptr) {
-                cout << songFound->title << " was found in the database!" << endl;
+                cout << songFound->title << " was found in the unordered map!" << endl;
+            }
+            else {
+                cout << "Song is not in database!\n" << endl;
+            }
+            if (mSongFound != "") {
+                cout << mSongFound << " was found in the ordered map!" << endl;
             }
             else {
                 cout << "Song is not in database!\n" << endl;
