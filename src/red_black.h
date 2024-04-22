@@ -33,8 +33,8 @@ public:
 
 struct red_black_tree
 {
-	bool ll;
-	bool rr;
+	bool l;
+	bool r;
 	bool rl;
 	bool lr;
 	red_black_node* root;
@@ -44,8 +44,8 @@ struct red_black_tree
 	red_black_tree()
 	{
 		this->root = nullptr;
-		bool ll = false;
-		bool rr = false;
+		bool l = false;
+		bool r = false;
 		bool rl = false;
 		bool lr = false;
 	}
@@ -73,8 +73,8 @@ struct red_black_tree
 		delete curr;
 	}
 	string to_lower(string title);
-	red_black_node* insertHelp(red_black_node* root, string& data);
-	void insert(string& data);
+	red_black_node* insert_node(red_black_node* root, string& title);
+	void insert(string& title);
 	red_black_node* right_rot(red_black_node* root);
 	red_black_node* left_rot(red_black_node* root);
 	string search(red_black_node* root, string& target, string title);
@@ -93,43 +93,53 @@ string red_black_tree::to_lower(string title)
 		title[i] = tolower(title[i]);
 	return title;
 }
-red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
-	bool f = false; // Flag to check RED-RED conflict
+//Inspired by geeks for geeks
+red_black_node* red_black_tree::insert_node(red_black_node* root, string& title) {
+	bool red_red = false; // Flag to check RED-RED conflict
 
+	// Insertes a node into the tree
 	if (root == nullptr)
-		return new red_black_node(data);
-	else if (data < root->title) {
-		root->left = insertHelp(root->left, data);
+		return new red_black_node(title);
+	// Inserts a node on the left branch
+	else if (title < root->title)
+	{
+		root->left = insert_node(root->left, title);
 		root->left->parent = root;
-		if (root != this->root) {
+		if (root != this->root)
+		{
 			if (root->red == true && root->left->red == true)
-				f = true;
+				red_red = true;
 		}
 	}
-	else {
-		root->right = insertHelp(root->right, data);
+	// Inserts a node on the right branch
+	else
+	{
+		root->right = insert_node(root->right, title);
 		root->right->parent = root;
-		if (root != this->root) {
+		if (root != this->root)
+		{
 			if (root->red == true && root->right->red == true)
-				f = true;
+				red_red = true;
 		}
 	}
 
 	// Perform rotations
-	if (ll == true)
+	if (l == true)
 	{
 		root = left_rot(root);
 		root->red = false;
 		root->left->red = true;
-		ll = false;
+		l = false;
 	}
-	else if (rr == true) {
+	else if (r == true)
+	{
 		root = right_rot(root);
 		root->red = false;
 		root->right->red = true;
-		rr = false;
+		r = false;
 	}
-	else if (rl == true) {
+	else if (rl == true)
+	{
 		root->right = right_rot(root->right);
 		root->right->parent = root;
 		root = left_rot(root);
@@ -137,7 +147,8 @@ red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
 		root->left->red = true;
 		rl = false;
 	}
-	else if (lr == true) {
+	else if (lr == true)
+	{
 		root->left = left_rot(root->left);
 		root->left->parent = root;
 		root = right_rot(root);
@@ -147,71 +158,84 @@ red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
 	}
 
 	// Handle RED-RED conflicts
-	if (f) {
-		if (root->parent->right == root) {
-			if (root->parent->left == nullptr || root->parent->left->red == false) {
+	if (red_red)
+	{
+		// If the root is a right child
+		if (root->parent->right == root)
+		{
+			// If the uncle is black (rotation)
+			if (root->parent->left == nullptr || root->parent->left->red == false)
+			{
 				if (root->left != nullptr && root->left->red == true)
 					rl = true;
 				else if (root->right != nullptr && root->right->red == true)
-					ll = true;
+					l = true;
 			}
-			else {
+			// If the uncle is red (Color flip)
+			else
+			{
 				root->parent->left->red = false;
 				root->red = false;
 				if (root->parent != this->root)
 					root->parent->red = true;
 			}
 		}
-		else {
-			if (root->parent->right == nullptr || root->parent->right->red == false) {
+		// If the root is a left child
+		else
+		{
+			// If the uncle is black (rotation)
+			if (root->parent->right == nullptr || root->parent->right->red == false)
+			{
 				if (root->left != nullptr && root->left->red == true)
-					rr = true;
+					r = true;
 				else if (root->right != nullptr && root->right->red == true)
 					lr = true;
 			}
-			else {
+			// If the uncle is red (color flip)
+			else
+			{
 				root->parent->right->red = false;
 				root->red = false;
 				if (root->parent != this->root)
 					root->parent->red = true;
 			}
 		}
-		f = false;
+		red_red = false;
 	}
 	return root;
 }
 
-void red_black_tree::insert(string& data) {
-	data = to_lower(data);
+void red_black_tree::insert(string& title) {
+	title = to_lower(title);
 	if (root == nullptr) {
-		root = new red_black_node(data);
+		root = new red_black_node(title);
 		root->red = false;
 	}
 	else
-		root = insertHelp(root, data);
+		root = insert_node(root, title);
 	size++;
 }
 
 red_black_node* red_black_tree::right_rot(red_black_node* node) {
-	red_black_node* x = node->left;
-	red_black_node* y = x->right;
-	x->right = node;
-	node->left = y;
-	node->parent = x;
-	if (y != nullptr)
-		y->parent = node;
-	return x;
+	red_black_node* new_root = node->left;
+	red_black_node* saved = new_root->right;
+	new_root->right = node;
+	node->left = saved;
+	node->parent = new_root;
+	if (saved != nullptr)
+		saved->parent = node;
+	return new_root;
 }
 
 red_black_node* red_black_tree::left_rot(red_black_node* node) {
-	red_black_node* x = node->right;
-	red_black_node* y = x->left;
-	x->left = node;
-	node->right = y;
-	node->parent = x;
-	if (y != nullptr)
-		y->parent = node;
-	return x;
+	red_black_node* new_root = node->right;
+	red_black_node* saved = new_root->left;
+	new_root->left = node;
+	node->right = saved;
+	node->parent = new_root;
+	if (saved != nullptr)
+		saved->parent = node;
+	return new_root;
 }
 
 string red_black_tree::search(red_black_node* root, string& target, string title)
