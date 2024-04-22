@@ -16,7 +16,7 @@ vector<string> readCSV(const string& filename) {
     vector<string> data;
 
     // reading in file
-    ifstream file("Songs and Artists.csv");
+    ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
         return data;
@@ -50,7 +50,7 @@ int main() {
     cout << endl;
 
     // Read in the CSV data
-    vector<string> csvData = readCSV("src/Songs and Artists.csv");
+    vector<string> csvData = readCSV("Songs and Artists.csv");
 
     // Chrono timer for hashmap
     auto timeStartUM = chrono::high_resolution_clock::now();
