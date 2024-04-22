@@ -383,9 +383,6 @@ map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<strin
 		freq = update_map(freq, root->title);
 		freq = freq_of_words(root->right, freq);
 	}
-    for (auto &item : freq) {
-        item.second /= (float)size;
-    }
 	return freq;
 }
 
