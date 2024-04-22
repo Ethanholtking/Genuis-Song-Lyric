@@ -331,8 +331,17 @@ float red_black_tree::get_song_titles(red_black_node* root, float percent, strin
 	if (root != nullptr)
 	{
 		percent = get_song_titles(root->left, percent, target);
-		if (root->title.find(target))
-			percent++;
+        stringstream songTitle(root->title);
+        string singleWord;
+        bool alreadyContains = false;
+        while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
+            if (!alreadyContains) {
+                if (target == singleWord) {
+                    percent++;
+                    alreadyContains = true;
+                }
+            }
+        }
 		percent = get_song_titles(root->right, percent, target);
 	}
 	return (float)percent / (float)size;
