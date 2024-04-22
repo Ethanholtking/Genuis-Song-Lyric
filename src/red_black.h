@@ -33,7 +33,6 @@ struct red_black_tree
 	bool rl;
 	bool lr;
 	red_black_node* root;
-	int size;
 
 	//Constructor
 	red_black_tree()
@@ -43,7 +42,6 @@ struct red_black_tree
 		bool rr = false;
 		bool rl = false;
 		bool lr = false;
-		this->size = 0;
 	}
 	// Getter
 	red_black_node* get_root()
@@ -179,6 +177,7 @@ red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
 }
 
 void red_black_tree::insert(string data) {
+	data = to_lower(data);
 	if (root == nullptr) {
 		root = new red_black_node(data);
 		root->red = false;
