@@ -104,7 +104,7 @@ int main() {
                     << endl;
             }
             auto timeStartM = chrono::high_resolution_clock::now();
-            std::map<string, float> freq;
+            std::unordered_map<string, float> freq;
             freq = tree.freq_of_words(tree.get_root(), freq);
             vector<pair<string, float>> top5M = tree.most_used_words(freq);
             auto timeEndM = chrono::high_resolution_clock::now();

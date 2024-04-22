@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <queue>
 #include <algorithm>
 using namespace std;
@@ -71,18 +71,16 @@ struct red_black_tree
 		delete curr;
 	}
 	string to_lower(string title);
-	red_black_node* insertHelp(red_black_node* root, string data);
+	red_black_node* insertHelp(red_black_node* root, string& data);
 	void insert(string data);
 	red_black_node* right_rot(red_black_node* root);
 	red_black_node* left_rot(red_black_node* root);
-	red_black_node* get_uncle(red_black_node* root);
-	red_black_node* get_grandparent(red_black_node* root);
-	string search(red_black_node* root, string target, string title);
-	vector<string> in_order_traversal(red_black_node* root, vector<string> titles);
-	float get_song_titles(red_black_node* root, float& percent, string target);
-	map<string, float> update_map(map<string, float> freq, string title);
-	map<string, float> freq_of_words(red_black_node* root, map<string, float> freq);
-	vector<pair<string, float>> most_used_words(map<string, float> freq);
+	string search(red_black_node* root, string& target, string title);
+	vector<string> in_order_traversal(red_black_node* root, vector<string>& titles);
+	float get_song_titles(red_black_node* root, float& percent, string& target);
+	//unordered_map<string, float> update_map(unordered_map<string, float> freq, string title);
+	unordered_map<string, float> freq_of_words(red_black_node* root, unordered_map<string, float>& freq);
+	vector<pair<string, float>> most_used_words(unordered_map<string, float>& freq);
 };
 
 string red_black_tree::to_lower(string title)
@@ -91,7 +89,7 @@ string red_black_tree::to_lower(string title)
 		title[i] = tolower(title[i]);
 	return title;
 }
-red_black_node* red_black_tree::insertHelp(red_black_node* root, string data) {
+red_black_node* red_black_tree::insertHelp(red_black_node* root, string& data) {
 	bool f = false; // Flag to check RED-RED conflict
 
 	if (root == nullptr)
@@ -212,18 +210,7 @@ red_black_node* red_black_tree::left_rot(red_black_node* node) {
 	return x;
 }
 
-red_black_node* red_black_tree::get_grandparent(red_black_node* root)
-{
-	// root is the root of the tree
-	if (root->parent == nullptr)
-		return nullptr;
-	// root is child of the tree's root
-	else if (root->parent->parent == nullptr)
-		return nullptr;
-	return root->parent->parent;
-}
-
-string red_black_tree::search(red_black_node* root, string target, string title)
+string red_black_tree::search(red_black_node* root, string& target, string title)
 {
 	if (root != nullptr)
 	{
@@ -235,7 +222,7 @@ string red_black_tree::search(red_black_node* root, string target, string title)
 	return title;
 }
 
-vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string> titles)
+vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<string>& titles)
 {
 	if (root != nullptr)
 	{
@@ -246,7 +233,7 @@ vector<string> red_black_tree::in_order_traversal(red_black_node* root, vector<s
 	return titles;
 }
 
-float red_black_tree::get_song_titles(red_black_node* root, float& percent, string target)
+float red_black_tree::get_song_titles(red_black_node* root, float& percent, string& target)
 {
 	if (root != nullptr)
 	{
@@ -267,7 +254,8 @@ float red_black_tree::get_song_titles(red_black_node* root, float& percent, stri
 	return percent;
 }
 
-map<string, float> red_black_tree::update_map(map<string, float> freq, string title)
+/*
+unordered_map<string, float> red_black_tree::update_map(unordered_map<string, float> freq, string title)
 {
 	stringstream songTitle(title);
 	string singleWord;
@@ -286,25 +274,21 @@ map<string, float> red_black_tree::update_map(map<string, float> freq, string ti
 	}
 	return freq;
 }
+*/
 
-map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<string, float> freq)
+unordered_map<string, float> red_black_tree::freq_of_words(red_black_node* root, unordered_map<string, float>& freq)
 {
 	if (root != nullptr)
 	{
 		freq = freq_of_words(root->left, freq);
 		stringstream songTitle(root->title);
 		string singleWord;
-		vector<string> alreadyContains;
 		while (songTitle >> singleWord) { // place all words in title into map to store words and frequencies
-			if (find(alreadyContains.begin(), alreadyContains.end(), singleWord) == alreadyContains.end()) {
-				if (freq.find(singleWord) != freq.end()) {
-					freq[singleWord]++;
-					alreadyContains.push_back(singleWord);
-				}
-				else {
-					freq.emplace(singleWord, 1);
-					alreadyContains.push_back(singleWord);
-				}
+			if (freq.find(singleWord) != freq.end()) {
+				freq[singleWord]++;
+			}
+			else {
+				freq.emplace(singleWord, 1);
 			}
 		}
 		freq = freq_of_words(root->right, freq);
@@ -312,7 +296,7 @@ map<string, float> red_black_tree::freq_of_words(red_black_node* root, map<strin
 	return freq;
 }
 
-vector<pair<string, float>> red_black_tree::most_used_words(map<string, float> freq)
+vector<pair<string, float>> red_black_tree::most_used_words(unordered_map<string, float>& freq)
 {
 	priority_queue<pair<float, string>, vector<pair<float, string>>, greater<pair<float, string>>> pq;
 	auto it = freq.begin();
