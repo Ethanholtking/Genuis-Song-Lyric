@@ -149,18 +149,26 @@ int main() {
             string findTitle;
             std::cout << "Please enter the song to search:";
             getline(cin >> std::ws, findTitle); // string to be searched in song list
-            auto timeStart = chrono::high_resolution_clock::now();
+            auto timeStartUM = chrono::high_resolution_clock::now();
             Node* songFound = map.searchSong(findTitle);
-            auto timeEnd = chrono::high_resolution_clock::now();
-            auto timeToExecute = chrono::duration_cast<chrono::milliseconds>(timeEnd - timeStart);
+            auto timeEndUM = chrono::high_resolution_clock::now();
+            auto timeToExecuteUM = chrono::duration_cast<chrono::milliseconds>(timeEndUM - timeStartUM);
+
+            auto timeStartM = chrono::high_resolution_clock::now();
+            // Search function for ordered map
+            auto timeEndM = chrono::high_resolution_clock::now();
+            auto timeToExecuteM = chrono::duration_cast<chrono::milliseconds>(timeEndM - timeStartM);
 
             if (songFound != nullptr) {
                 cout << songFound->title  << " was found in the database!" << endl;
             }
             else{
-                cout << "Song is not in database!" << endl;
+                cout << "Song is not in database!\n" << endl;
             }
-            cout << "Search function in Unordered Map (Hash Table) performed in " << timeToExecute.count()
+
+            cout << "Search function in Unordered Map (Hash Table) performed in " << timeToExecuteUM.count()
+                 << "ms!" << endl;
+            cout << "Search function in Ordered Map (Red Black Tree) performed in " << timeToExecuteM.count()
                  << "ms!" << endl;
         }
         else {
